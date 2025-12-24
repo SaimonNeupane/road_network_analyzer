@@ -1,8 +1,9 @@
 import React from "react";
-import MapView from "./components/MapComponent";
+// import MapView from "./components/layout/MapComponent";
+import MapPage from "./pages/MapPage";
 
 const App = () => {
-  return <MapView />;
+  return <MapPage />;
 };
 
 export default App;
