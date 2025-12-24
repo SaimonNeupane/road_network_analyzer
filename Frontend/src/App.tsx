@@ -1,7 +1,8 @@
 import React from "react";
+import MapView from "./components/MapComponent";
 
 const App = () => {
-  return <div className="bg-red-400">App keshav branch added</div>;
+  return <MapView />;
 };
 
 export default App;
