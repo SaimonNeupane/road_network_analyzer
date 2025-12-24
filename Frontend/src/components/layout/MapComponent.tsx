@@ -111,11 +111,11 @@ export default function MapComponent({
     searchTerm.trim() === ""
       ? locations
       : locations.filter(
-          (loc) =>
-            loc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            loc.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            loc.description.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        (loc) =>
+          loc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          loc.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          loc.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
   const handleMarkerClick = (location: LocationData) => {
     setSelectedLocation(location);
     onMarkerClick(location);
@@ -146,33 +146,33 @@ export default function MapComponent({
   return (
     <div className="relative w-full h-full">
       {/* Search Bar */}
-      <div className="absolute top-4 left-4 z-1000 w-80">
-        <input
-          type="text"
-          placeholder="Search locations..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 rounded-lg shadow-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        {searchTerm && (
-          <div className="mt-2 bg-white rounded-lg shadow-lg max-h-60 overflow-y-auto">
-            {filteredLocations.map((loc) => (
-              <div
-                key={loc.id}
-                onClick={() => {
-                  handleMarkerClick(loc);
-                  setSearchTerm("");
-                }}
-                className="p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-0"
-              >
-                <div className="font-semibold text-sm">{loc.name}</div>
-                <div className="text-xs text-gray-600">{loc.category}</div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
+      {/* <div className="absolute top-4 left-4 z-1000 w-80"> */}
+      {/*   <input */}
+      {/*     type="text" */}
+      {/*     placeholder="Search locations..." */}
+      {/*     value={searchTerm} */}
+      {/*     onChange={(e) => setSearchTerm(e.target.value)} */}
+      {/*     className="w-full px-4 py-2 rounded-lg shadow-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" */}
+      {/*   /> */}
+      {/*   {searchTerm && ( */}
+      {/*     <div className="mt-2 bg-white rounded-lg shadow-lg max-h-60 overflow-y-auto"> */}
+      {/*       {filteredLocations.map((loc) => ( */}
+      {/*         <div */}
+      {/*           key={loc.id} */}
+      {/*           onClick={() => { */}
+      {/*             handleMarkerClick(loc); */}
+      {/*             setSearchTerm(""); */}
+      {/*           }} */}
+      {/*           className="p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-0" */}
+      {/*         > */}
+      {/*           <div className="font-semibold text-sm">{loc.name}</div> */}
+      {/*           <div className="text-xs text-gray-600">{loc.category}</div> */}
+      {/*         </div> */}
+      {/*       ))} */}
+      {/*     </div> */}
+      {/*   )} */}
+      {/* </div> */}
+      {/**/}
       {/* Map Style Selector */}
       {showControls && (
         <div className="absolute top-4 right-4 z-[1000] bg-white rounded-lg shadow-lg p-2">
@@ -181,11 +181,10 @@ export default function MapComponent({
               <button
                 key={style}
                 onClick={() => setMapStyle(style)}
-                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${
-                  mapStyle === style
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-100 hover:bg-gray-200"
-                }`}
+                className={`px-3 py-1 rounded text-xs font-medium transition-colors ${mapStyle === style
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 hover:bg-gray-200"
+                  }`}
               >
                 {style.charAt(0).toUpperCase() + style.slice(1)}
               </button>
