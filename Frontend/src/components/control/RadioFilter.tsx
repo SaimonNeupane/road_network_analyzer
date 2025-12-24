@@ -1,26 +1,43 @@
-interface Props {
-  selected: string;
+"use client";
+import type { RadioOption } from "../../types/location";
+
+interface RadioFilterProps {
+  options: RadioOption[];
+  selectedValue: string;
   onChange: (value: string) => void;
+  label?: string;
 }
 
-const options = ["Radio 1", "Radio 2", "Radio 3"];
-
-const RadioFilter = ({ selected, onChange }: Props) => {
+export default function RadioFilter({
+  options,
+  selectedValue,
+  onChange,
+  label = "Filter by Category",
+}: RadioFilterProps) {
   return (
-    <div className="p-4 border rounded">
-      {options.map((opt) => (
-        <label key={opt} className="flex items-center mb-3 gap-2">
-          <input
-            type="radio"
-            value={opt}
-            checked={selected === opt}
-            onChange={() => onChange(opt)}
-          />
-          {opt}
-        </label>
-      ))}
+    <div className="w-full">
+      <label className="block text-sm font-semibold text-gray-700 mb-3">
+        {label}
+      </label>
+      <div className="space-y-2">
+        {options.map((option) => (
+          <label
+            key={option.value}
+            className="flex items-center space-x-3 cursor-pointer group"
+          >
+            <input
+              type="radio"
+              value={option.value}
+              checked={selectedValue === option.value}
+              onChange={(e) => onChange(e.target.value)}
+              className="w-4 h-4 text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            />
+            <span className="text-gray-700 group-hover:text-gray-900 transition-colors">
+              {option.label}
+            </span>
+          </label>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default RadioFilter;
+}

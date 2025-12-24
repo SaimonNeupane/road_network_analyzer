@@ -6,3 +6,7 @@ export interface LocationData {
   description: string;
   category: string;
 }
+export interface RadioOption {
+  value: string;
+  label: string;
+}
