@@ -14,8 +14,8 @@ app.add_middleware(
 
 @app.get("/{district_name}")
 def read_root(district_name):
-    longitude = 26.5455
-    lattitude = 87.8942
+    longitude = 87.8942
+    lattitude = 26.5455
     district = district_name
     dictt = {"longitude": longitude, "latitude": lattitude, "district": district}
     return dictt
