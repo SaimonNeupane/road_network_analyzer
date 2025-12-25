@@ -52,9 +52,6 @@ Pygments==2.19.2
 pyogrio==0.12.1
 pyparsing==3.2.5
 pyproj==3.7.1
-PyQt5==5.15.11
-PyQt5-Qt5==5.15.18
-PyQt5_sip==12.17.2
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.1
 python-multipart==0.0.21
