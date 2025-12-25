@@ -219,7 +219,7 @@ export default function MapComponent({
 
         {/* --- 4. Render Roads if data exists --- */}
         {/* We use a key to force re-render when the data changes, usually React-Leaflet needs this */}
-        {roadData && (
+        {roadData && (currentZoom >= 12) && (
           <GeoJSON
             key={JSON.stringify(roadData).length} // Simple hash to force update when data changes
             data={roadData}
