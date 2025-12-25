@@ -115,7 +115,10 @@ export default function MapComponent({
 
   // Style for the roads (Blue lines)
   const roadStyle = {
-    color: "#000000", // Tailwind blue-600
+    color: mapStyle == "streets" || mapStyle == "light" ? "#000000" : "#FF9800",
+
+    // satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    // // Tailwind blue-600
     weight: 1,
     opacity: 0.6,
   };

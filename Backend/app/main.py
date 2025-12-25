@@ -43,28 +43,22 @@ def get_roads(district_name: str):
     cache_file = os.path.join(CACHE_DIR, f"{clean_name}.geojson")
 
     try:
-        # 1. CHECK CACHE: If we already have the file, return it immediately
         if os.path.exists(cache_file):
             print(f"Loading {clean_name} from cache...")
             with open(cache_file, "r") as f:
                 return json.load(f)
 
-        # 2. DOWNLOAD: If not in cache, download from OSM (The slow part)
         print(f"Downloading {clean_name} from OSM (this may take time)...")
-        place_query = f"{clean_name} District, Nepal"
+        place_query = f"{clean_name}, Nepal"
 
-        # simplify=True is CRITICAL for reducing file size
         G = ox.graph_from_place(place_query, network_type="drive", simplify=True)
 
-        # Convert to GeoDataFrame
         gdf_edges = ox.graph_to_gdfs(G, nodes=False)
 
-        # Filter columns
         columns_to_keep = ["geometry", "name", "highway", "length"]
         available_cols = [c for c in columns_to_keep if c in gdf_edges.columns]
         gdf_edges = gdf_edges[available_cols]
 
-        # 3. SAVE TO CACHE: Save the result so we never download it again
         geojson_str = gdf_edges.to_json()
         with open(cache_file, "w") as f:
             f.write(geojson_str)
