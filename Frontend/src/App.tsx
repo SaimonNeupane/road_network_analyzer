@@ -1,7 +1,9 @@
 import React from "react";
+// import MapView from "./components/layout/MapComponent";
+import MapPage from "./pages/MapPage";
 
 const App = () => {
-  return <div className="bg-red-400">App</div>;
+  return <MapPage />;
 };
 
 export default App;
