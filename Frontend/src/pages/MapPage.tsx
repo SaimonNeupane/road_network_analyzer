@@ -1,190 +1,168 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import MapComponent from "../components/layout/MapComponent";
-import { fetchLocations, fetchRoads } from "../services/api"; // Import fetchRoads
+import { fetchLocations, fetchProposedRoads, fetchRoads } from "../services/api";
 import type { LocationData, RadioOption } from "../types/location";
 
 export default function MapPage() {
-  const [searchText, setSearchText] = useState<string>("jhapa");
+  const [searchText, setSearchText] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [locations, setLocations] = useState<LocationData[]>([]);
-  const [roadData, setRoadData] = useState<any>(null); // <--- New State for Roads
-  const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
-    null
-  );
-  const [loading, setLoading] = useState<boolean>(false);
-  const [district, setDistrict] = useState("");
-  const [place, setPlace] = useState("");
 
-  // ... [Keep Radio Options same] ...
+  // Input State
+  const [district, setDistrict] = useState("Kavre");
+  const [place, setPlace] = useState("Dhulikhel");
+
+  // Map Data State
+  const [existingRoads, setExistingRoads] = useState<any>(null); // Layer 1: Grey roads
+  const [proposedRoads, setProposedRoads] = useState<any>(null); // Layer 2: Colored proposals
+
+  const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const radioOptions: RadioOption[] = [
     { value: "all", label: "All Categories" },
     { value: "park", label: "Parks" },
     { value: "landmark", label: "Landmarks" },
-    { value: "museum", label: "Museums" },
     { value: "education", label: "Education" },
   ];
 
-  // const handleSearch = async () => {
-  //   setLoading(true);
-  //   setRoadData(null); // Reset roads while loading new ones
-
-  //   try {
-  //     // 1. Fetch Locations
-  //     // We do this separately or concurrently.
-  //     // Let's do it concurrently to save time, but wrap roads in a try-catch
-  //     // so if roads fail (e.g. 404), markers still load.
-
-  //     const locationPromise = fetchLocations(searchText, selectedCategory);
-  //     const roadPromise = fetchRoads(searchText).catch(err => {
-  //       console.warn("Could not fetch roads:", err);
-  //       return { data: null }; // Return null if roads fail
-  //     });
-
-  //     const [locationRes, roadRes] = await Promise.all([locationPromise, roadPromise]);
-
-  //     // --- Process Location Data ---
-  //     const rawData = locationRes.data;
-  //     let dataToProcess: any[] = [];
-  //     if (Array.isArray(rawData)) {
-  //       dataToProcess = rawData;
-  //     } else if (rawData && typeof rawData === "object") {
-  //       dataToProcess = [rawData];
-  //     }
-  //     const sanitizedData = dataToProcess.map((loc: any) => ({
-  //       ...loc,
-  //       latitude: Number(loc.latitude),
-  //       longitude: Number(loc.longitude),
-  //     }));
-  //     setLocations(sanitizedData);
-
-  //     // --- Process Road Data ---
-  //     if (roadRes && roadRes.data) {
-  //       setRoadData(roadRes.data);
-  //     }
-
-  //     setSelectedLocation(null);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     setLocations([]);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
   const handleSearch = async () => {
+    if (!district || !place) {
+      alert("Please enter both District and Place name");
+      return;
+    }
+
     setLoading(true);
-    setRoadData(null); // reset roads before new search
+    setExistingRoads(null);
+    setProposedRoads(null);
+    setLocations([]);
 
     try {
-      // 🔹 Validate input (optional but recommended)
-      if (!district.trim() && !place.trim()) {
-        setLocations([]);
-        setRoadData(null);
-        return;
-      }
+      // 1. Fetch Locations (for markers)
+      const locationPromise = fetchLocations(district, place);
 
-      /**
-       * 1️⃣ Fetch locations using BOTH district & place
-       * 2️⃣ Fetch roads using PLACE only (roads are place-specific)
-       *    Roads are optional → markers should still load if roads fail
-       */
-      const locationPromise = fetchLocations(district.trim(), place.trim());
+      // 2. Fetch Existing Roads (standard OSM data)
+      const roadsPromise = fetchRoads(place);
 
-      const roadPromise = place.trim()
-        ? fetchRoads(place.trim()).catch((err) => {
-            console.warn("Could not fetch roads:", err);
-            return { data: null };
-          })
-        : Promise.resolve({ data: null });
+      // 3. Fetch Proposed Roads (Python script result)
+      console.log(`Running analysis for: ${place}, ${district}...`);
+      const proposedPromise = fetchProposedRoads(place, district);
 
-      const [locationRes, roadRes] = await Promise.all([
+      // Run all requests in parallel
+      const [locationRes, roadsRes, proposedRes] = await Promise.all([
         locationPromise,
-        roadPromise,
+        roadsPromise,
+        proposedPromise
       ]);
 
-      // ---------- Process Location Data ----------
-      const rawData = locationRes?.data;
-      let dataToProcess: any[] = [];
-
-      if (Array.isArray(rawData)) {
-        dataToProcess = rawData;
-      } else if (rawData && typeof rawData === "object") {
-        dataToProcess = [rawData];
-      }
-
+      // --- Process Markers ---
+      const rawData = locationRes.data;
+      const dataToProcess = Array.isArray(rawData) ? rawData : [rawData];
       const sanitizedData = dataToProcess.map((loc: any) => ({
         ...loc,
         latitude: Number(loc.latitude),
         longitude: Number(loc.longitude),
       }));
-
       setLocations(sanitizedData);
 
-      // ---------- Process Road Data ----------
-      if (roadRes?.data) {
-        setRoadData(roadRes.data);
-      } else {
-        setRoadData(null);
+      // --- Process Existing Roads ---
+      if (roadsRes.data) {
+        setExistingRoads(roadsRes.data);
+      }
+
+      // --- Process Proposed Roads ---
+      if (proposedRes.data) {
+        console.log("Proposed Data Received:", proposedRes.data);
+        setProposedRoads(proposedRes.data);
       }
 
       setSelectedLocation(null);
+
     } catch (error) {
       console.error("Error fetching data:", error);
-      setLocations([]);
-      setRoadData(null);
+      alert("An error occurred while fetching map data. Check console for details.");
     } finally {
       setLoading(false);
     }
   };
 
-  // ... [Keep remaining handlers same] ...
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
   };
 
-  const handleMarkerClick = (location: LocationData) => {
-    setSelectedLocation(location);
-  };
-
-  useEffect(() => {
-    handleSearch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory]);
-
   return (
     <div className="flex h-screen w-screen bg-gray-100">
-      <div className="w-96 h-full flex-shrink-0 relative z-20">
-        <Sidebar
-          searchValue={searchText}
-          onSearchChange={setSearchText}
-          onSearchSubmit={handleSearch}
-          radioOptions={radioOptions}
-          selectedRadio={selectedCategory}
-          onRadioChange={handleCategoryChange}
-          selectedLocation={selectedLocation}
-        />
+      {/* Sidebar Area */}
+      <div className="w-96 h-full flex-shrink-0 relative z-20 flex flex-col bg-white shadow-lg p-4">
+        <h2 className="text-xl font-bold mb-4">Road Planner</h2>
+
+        {/* INPUTS */}
+        <div className="flex flex-col gap-3 mb-6">
+          <div>
+            <label className="text-xs font-bold text-gray-500 uppercase">District</label>
+            <input
+              className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
+              placeholder="e.g. Kavre"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-bold text-gray-500 uppercase">Place Name</label>
+            <input
+              className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+              value={place}
+              onChange={(e) => setPlace(e.target.value)}
+              placeholder="e.g. Dhulikhel"
+            />
+          </div>
+          <button
+            onClick={handleSearch}
+            disabled={loading}
+            className={`w-full py-2 rounded text-white transition ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+              }`}
+          >
+            {loading ? "Calculating..." : "Find Proposed Roads"}
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-auto">
+          <Sidebar
+            searchValue={searchText}
+            onSearchChange={setSearchText}
+            onSearchSubmit={handleSearch}
+            radioOptions={radioOptions}
+            selectedRadio={selectedCategory}
+            onRadioChange={handleCategoryChange}
+            selectedLocation={selectedLocation}
+          />
+        </div>
       </div>
 
+      {/* Map Area */}
       <div className="flex-1 h-full p-4 relative z-10">
         {loading ? (
           <div className="w-full h-full flex items-center justify-center bg-white rounded-lg shadow-lg">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-              <p className="text-gray-600">Loading locations & roads...</p>
+              <p className="text-gray-600 font-medium">Running GNN Inference...</p>
+              <p className="text-xs text-gray-400">This may take a few seconds</p>
             </div>
           </div>
         ) : (
           <MapComponent
             locations={locations}
-            roadData={roadData} // <--- Pass the road data here
-            onMarkerClick={handleMarkerClick}
+            existingRoads={existingRoads} // Pass existing layer
+            proposedRoads={proposedRoads} // Pass proposed layer
+            onMarkerClick={setSelectedLocation}
             center={
               locations.length > 0
                 ? [locations[0].latitude, locations[0].longitude]
                 : [27.6253, 85.5561]
             }
-            zoom={12}
+            zoom={13}
           />
         )}
       </div>

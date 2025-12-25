@@ -1,339 +1,1105 @@
 {
-  "place_target": "Gauradaha, Nepal",
-  "district": "Jhapa",
-  "pop_density": 4.518816849933385,
-  "top_cycleway_upgrades": [
+  "type": "FeatureCollection",
+  "features": [
     {
-      "rank": 1,
-      "u": 3443273884,
-      "v": 3382725383,
-      "key": 0,
-      "score": 0.41302940249443054
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.198604,
+            26.5160567
+          ],
+          [
+            87.2029486,
+            26.5154696
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 1,
+        "score": 0.8627047538757324,
+        "name": "Proposed Road #1"
+      }
     },
     {
-      "rank": 2,
-      "u": 3382725383,
-      "v": 3443273884,
-      "key": 0,
-      "score": 0.4126712679862976
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2426265,
+            26.624704
+          ],
+          [
+            87.2434833,
+            26.6267535
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 2,
+        "score": 0.8538804054260254,
+        "name": "Proposed Road #2"
+      }
     },
     {
-      "rank": 3,
-      "u": 5056875994,
-      "v": 5056875995,
-      "key": 0,
-      "score": 0.41238662600517273
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2145654,
+            26.589865
+          ],
+          [
+            87.2087877,
+            26.5903706
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 3,
+        "score": 0.8529114723205566,
+        "name": "Proposed Road #3"
+      }
     },
     {
-      "rank": 4,
-      "u": 5056875992,
-      "v": 5056875993,
-      "key": 0,
-      "score": 0.4123865067958832
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2093311,
+            26.5928225
+          ],
+          [
+            87.2087877,
+            26.5903706
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 4,
+        "score": 0.8305977582931519,
+        "name": "Proposed Road #4"
+      }
     },
     {
-      "rank": 5,
-      "u": 5059281999,
-      "v": 5059282000,
-      "key": 0,
-      "score": 0.4117676019668579
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.245142,
+            26.6124458
+          ],
+          [
+            87.2458824,
+            26.6077705
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 5,
+        "score": 0.8293195366859436,
+        "name": "Proposed Road #5"
+      }
     },
     {
-      "rank": 6,
-      "u": 5056512373,
-      "v": 2424024281,
-      "key": 0,
-      "score": 0.41169026494026184
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2438454,
+            26.6072934
+          ],
+          [
+            87.2458824,
+            26.6077705
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 6,
+        "score": 0.8293194770812988,
+        "name": "Proposed Road #6"
+      }
     },
     {
-      "rank": 7,
-      "u": 5059281969,
-      "v": 5059281966,
-      "key": 0,
-      "score": 0.41148847341537476
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2029486,
+            26.5154696
+          ],
+          [
+            87.1981525,
+            26.5150784
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 7,
+        "score": 0.827225387096405,
+        "name": "Proposed Road #7"
+      }
     },
     {
-      "rank": 8,
-      "u": 5054338897,
-      "v": 5054338896,
-      "key": 0,
-      "score": 0.41148680448532104
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2093311,
+            26.5928225
+          ],
+          [
+            87.2072472,
+            26.5886991
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 8,
+        "score": 0.8228337168693542,
+        "name": "Proposed Road #8"
+      }
     },
     {
-      "rank": 9,
-      "u": 5061067353,
-      "v": 5061067358,
-      "key": 0,
-      "score": 0.4110557436943054
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2145654,
+            26.589865
+          ],
+          [
+            87.2111489,
+            26.5914705
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 9,
+        "score": 0.8224544525146484,
+        "name": "Proposed Road #9"
+      }
     },
     {
-      "rank": 10,
-      "u": 5054636785,
-      "v": 5054636794,
-      "key": 0,
-      "score": 0.410905659198761
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2131596,
+            26.5903407
+          ],
+          [
+            87.2087877,
+            26.5903706
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 10,
+        "score": 0.8115114569664001,
+        "name": "Proposed Road #10"
+      }
     },
     {
-      "rank": 11,
-      "u": 5054283052,
-      "v": 3443431647,
-      "key": 0,
-      "score": 0.41068145632743835
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2093311,
+            26.5928225
+          ],
+          [
+            87.2076842,
+            26.5916722
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 11,
+        "score": 0.8021116256713867,
+        "name": "Proposed Road #11"
+      }
     },
     {
-      "rank": 12,
-      "u": 5054317034,
-      "v": 3443146520,
-      "key": 0,
-      "score": 0.4106011986732483
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2241945,
+            26.5808142
+          ],
+          [
+            87.2252306,
+            26.5846582
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 12,
+        "score": 0.8010413646697998,
+        "name": "Proposed Road #12"
+      }
     },
     {
-      "rank": 13,
-      "u": 4994910539,
-      "v": 4994910574,
-      "key": 0,
-      "score": 0.4105895757675171
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.245142,
+            26.6124458
+          ],
+          [
+            87.2438454,
+            26.6072934
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 13,
+        "score": 0.7935972809791565,
+        "name": "Proposed Road #13"
+      }
     },
     {
-      "rank": 14,
-      "u": 5053882727,
-      "v": 5053882728,
-      "key": 0,
-      "score": 0.41052481532096863
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2419015,
+            26.6165959
+          ],
+          [
+            87.2409239,
+            26.6123721
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 14,
+        "score": 0.7849645018577576,
+        "name": "Proposed Road #14"
+      }
     },
     {
-      "rank": 15,
-      "u": 11038787991,
-      "v": 5056009716,
-      "key": 0,
-      "score": 0.41003984212875366
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2439178,
+            26.6172245
+          ],
+          [
+            87.2437452,
+            26.6187314
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 15,
+        "score": 0.7801757454872131,
+        "name": "Proposed Road #15"
+      }
     },
     {
-      "rank": 16,
-      "u": 5053947850,
-      "v": 5053947851,
-      "key": 0,
-      "score": 0.41002508997917175
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2240806,
+            26.5845175
+          ],
+          [
+            87.2241945,
+            26.5808142
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 16,
+        "score": 0.7798898220062256,
+        "name": "Proposed Road #16"
+      }
     },
     {
-      "rank": 17,
-      "u": 5054283035,
-      "v": 5054283036,
-      "key": 0,
-      "score": 0.4099261462688446
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.241992,
+            26.6204281
+          ],
+          [
+            87.2427242,
+            26.6168959
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 17,
+        "score": 0.7785535454750061,
+        "name": "Proposed Road #17"
+      }
     },
     {
-      "rank": 18,
-      "u": 5031942556,
-      "v": 5031942587,
-      "key": 0,
-      "score": 0.40984195470809937
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2093311,
+            26.5928225
+          ],
+          [
+            87.2067778,
+            26.5884093
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 18,
+        "score": 0.7762978076934814,
+        "name": "Proposed Road #18"
+      }
     },
     {
-      "rank": 19,
-      "u": 5056009710,
-      "v": 5056006308,
-      "key": 0,
-      "score": 0.40933749079704285
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.241331,
+            26.607796
+          ],
+          [
+            87.2458824,
+            26.6077705
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 19,
+        "score": 0.7760162949562073,
+        "name": "Proposed Road #19"
+      }
     },
     {
-      "rank": 20,
-      "u": 5060356822,
-      "v": 5060356718,
-      "key": 0,
-      "score": 0.40932419896125793
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2111489,
+            26.5914705
+          ],
+          [
+            87.207952,
+            26.5917919
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 20,
+        "score": 0.7750046253204346,
+        "name": "Proposed Road #20"
+      }
     },
     {
-      "rank": 21,
-      "u": 5054283041,
-      "v": 5054283038,
-      "key": 0,
-      "score": 0.40932220220565796
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2419015,
+            26.6165959
+          ],
+          [
+            87.2457069,
+            26.6192534
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 21,
+        "score": 0.7717876434326172,
+        "name": "Proposed Road #21"
+      }
     },
     {
-      "rank": 22,
-      "u": 5060356630,
-      "v": 5060356641,
-      "key": 0,
-      "score": 0.40916040539741516
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.245142,
+            26.6124458
+          ],
+          [
+            87.2440988,
+            26.6078404
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 22,
+        "score": 0.7706447243690491,
+        "name": "Proposed Road #22"
+      }
     },
     {
-      "rank": 23,
-      "u": 5058047473,
-      "v": 5058047476,
-      "key": 0,
-      "score": 0.40909090638160706
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2438454,
+            26.6072934
+          ],
+          [
+            87.2456987,
+            26.6100169
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 23,
+        "score": 0.7706447243690491,
+        "name": "Proposed Road #23"
+      }
     },
     {
-      "rank": 24,
-      "u": 5057706209,
-      "v": 3443432447,
-      "key": 0,
-      "score": 0.4089066684246063
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2419015,
+            26.6165959
+          ],
+          [
+            87.2439178,
+            26.6172245
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 24,
+        "score": 0.7705632448196411,
+        "name": "Proposed Road #24"
+      }
     },
     {
-      "rank": 25,
-      "u": 5060324183,
-      "v": 3443146903,
-      "key": 0,
-      "score": 0.40887650847435
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2409239,
+            26.6123721
+          ],
+          [
+            87.2440988,
+            26.6078404
+          ]
+        ]
+      },
+      "properties": {
+        "type": "new_road",
+        "rank": 25,
+        "score": 0.7687143087387085,
+        "name": "Proposed Road #25"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.1668376,
+            26.5669808
+          ],
+          [
+            87.1671864,
+            26.56676
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 1,
+        "score": 0.41650182008743286,
+        "name": "Upgrade Proposal #1"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.1670124,
+            26.567379
+          ],
+          [
+            87.1674356,
+            26.5671691
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 2,
+        "score": 0.41636529564857483,
+        "name": "Upgrade Proposal #2"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.218239,
+            26.5907639
+          ],
+          [
+            87.2171685,
+            26.5910095
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 3,
+        "score": 0.41630491614341736,
+        "name": "Upgrade Proposal #3"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2022669,
+            26.5500311
+          ],
+          [
+            87.2026113,
+            26.550999
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 4,
+        "score": 0.4162824749946594,
+        "name": "Upgrade Proposal #4"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.1623194,
+            26.5369791
+          ],
+          [
+            87.1623986,
+            26.5376247
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 5,
+        "score": 0.41601672768592834,
+        "name": "Upgrade Proposal #5"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2258274,
+            26.5915409
+          ],
+          [
+            87.2259897,
+            26.5915217
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 6,
+        "score": 0.41598138213157654,
+        "name": "Upgrade Proposal #6"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2252481,
+            26.591283
+          ],
+          [
+            87.225244,
+            26.5912255
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 7,
+        "score": 0.4154224097728729,
+        "name": "Upgrade Proposal #7"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.1623294,
+            26.5365127
+          ],
+          [
+            87.1626925,
+            26.537636
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 8,
+        "score": 0.41500595211982727,
+        "name": "Upgrade Proposal #8"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2314131,
+            26.5943926
+          ],
+          [
+            87.2323777,
+            26.5939004
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 9,
+        "score": 0.41464531421661377,
+        "name": "Upgrade Proposal #9"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2175734,
+            26.5895381
+          ],
+          [
+            87.2165451,
+            26.5898388
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 10,
+        "score": 0.41456663608551025,
+        "name": "Upgrade Proposal #10"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2231063,
+            26.5949071
+          ],
+          [
+            87.2228301,
+            26.5946073
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 11,
+        "score": 0.41455212235450745,
+        "name": "Upgrade Proposal #11"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2269834,
+            26.584843
+          ],
+          [
+            87.2271377,
+            26.5842481
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 12,
+        "score": 0.41451793909072876,
+        "name": "Upgrade Proposal #12"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2268976,
+            26.5881578
+          ],
+          [
+            87.2265315,
+            26.5883329
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 13,
+        "score": 0.41437265276908875,
+        "name": "Upgrade Proposal #13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.223042,
+            26.5801907
+          ],
+          [
+            87.223378,
+            26.5800966
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 14,
+        "score": 0.4135901629924774,
+        "name": "Upgrade Proposal #14"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2191777,
+            26.5938356
+          ],
+          [
+            87.2216998,
+            26.5943547
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 15,
+        "score": 0.41197657585144043,
+        "name": "Upgrade Proposal #15"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.203556,
+            26.5884952
+          ],
+          [
+            87.2053303,
+            26.5901685
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 16,
+        "score": 0.4116012454032898,
+        "name": "Upgrade Proposal #16"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2329688,
+            26.6028576
+          ],
+          [
+            87.2360993,
+            26.602444
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 17,
+        "score": 0.4115462005138397,
+        "name": "Upgrade Proposal #17"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.1770471,
+            26.5706849
+          ],
+          [
+            87.1796532,
+            26.5679226
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 18,
+        "score": 0.41149812936782837,
+        "name": "Upgrade Proposal #18"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2470572,
+            26.6195041
+          ],
+          [
+            87.2471233,
+            26.6201431
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 19,
+        "score": 0.4112994968891144,
+        "name": "Upgrade Proposal #19"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2299956,
+            26.594232
+          ],
+          [
+            87.22674,
+            26.5927947
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 20,
+        "score": 0.41100504994392395,
+        "name": "Upgrade Proposal #20"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2259253,
+            26.5953208
+          ],
+          [
+            87.2243228,
+            26.5935941
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 21,
+        "score": 0.41098377108573914,
+        "name": "Upgrade Proposal #21"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2017688,
+            26.5480757
+          ],
+          [
+            87.2006589,
+            26.551618
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 22,
+        "score": 0.4109657108783722,
+        "name": "Upgrade Proposal #22"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.1924524,
+            26.5197919
+          ],
+          [
+            87.1923564,
+            26.5164295
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 23,
+        "score": 0.410367876291275,
+        "name": "Upgrade Proposal #23"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.1804377,
+            26.5726429
+          ],
+          [
+            87.1821226,
+            26.56983
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 24,
+        "score": 0.410269170999527,
+        "name": "Upgrade Proposal #24"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            87.2081756,
+            26.5547071
+          ],
+          [
+            87.208208,
+            26.5550007
+          ]
+        ]
+      },
+      "properties": {
+        "type": "upgrade",
+        "rank": 25,
+        "score": 0.4101565182209015,
+        "name": "Upgrade Proposal #25"
+      }
     }
-  ],
-  "top_new_driveways": [
-    {
-      "rank": 1,
-      "u": 5054058324,
-      "v": 5054636791,
-      "score": 0.9062216877937317
-    },
-    {
-      "rank": 2,
-      "u": 5054636793,
-      "v": 5054058326,
-      "score": 0.9062216281890869
-    },
-    {
-      "rank": 3,
-      "u": 2424024287,
-      "v": 4759632039,
-      "score": 0.8434329628944397
-    },
-    {
-      "rank": 4,
-      "u": 4759632039,
-      "v": 5031942538,
-      "score": 0.8187547326087952
-    },
-    {
-      "rank": 5,
-      "u": 5031942599,
-      "v": 4759632039,
-      "score": 0.8144399523735046
-    },
-    {
-      "rank": 6,
-      "u": 5071659235,
-      "v": 5071651318,
-      "score": 0.8103635311126709
-    },
-    {
-      "rank": 7,
-      "u": 5054603535,
-      "v": 5031942538,
-      "score": 0.7910679578781128
-    },
-    {
-      "rank": 8,
-      "u": 4759631966,
-      "v": 5031942538,
-      "score": 0.7910679578781128
-    },
-    {
-      "rank": 9,
-      "u": 5031942596,
-      "v": 5031942538,
-      "score": 0.7910679578781128
-    },
-    {
-      "rank": 10,
-      "u": 2424024287,
-      "v": 5054636792,
-      "score": 0.7644270658493042
-    },
-    {
-      "rank": 11,
-      "u": 2424024287,
-      "v": 5054636790,
-      "score": 0.7644270658493042
-    },
-    {
-      "rank": 12,
-      "u": 5031942610,
-      "v": 5059281969,
-      "score": 0.7615020275115967
-    },
-    {
-      "rank": 13,
-      "u": 5057270161,
-      "v": 11038787991,
-      "score": 0.7615020275115967
-    },
-    {
-      "rank": 14,
-      "u": 5031942610,
-      "v": 5054283035,
-      "score": 0.7615020275115967
-    },
-    {
-      "rank": 15,
-      "u": 5031942610,
-      "v": 5054636785,
-      "score": 0.7615020275115967
-    },
-    {
-      "rank": 16,
-      "u": 5071651332,
-      "v": 5071682262,
-      "score": 0.7615020275115967
-    },
-    {
-      "rank": 17,
-      "u": 5031942610,
-      "v": 5049101381,
-      "score": 0.7615020275115967
-    },
-    {
-      "rank": 18,
-      "u": 3443235688,
-      "v": 3443275058,
-      "score": 0.7552026510238647
-    },
-    {
-      "rank": 19,
-      "u": 3442996083,
-      "v": 3442996221,
-      "score": 0.7539326548576355
-    },
-    {
-      "rank": 20,
-      "u": 2424024287,
-      "v": 3443149260,
-      "score": 0.7498793601989746
-    },
-    {
-      "rank": 21,
-      "u": 3443307110,
-      "v": 3443149260,
-      "score": 0.7498793601989746
-    },
-    {
-      "rank": 22,
-      "u": 5031942599,
-      "v": 3443307110,
-      "score": 0.7498507499694824
-    },
-    {
-      "rank": 23,
-      "u": 5054058323,
-      "v": 5054636790,
-      "score": 0.7429291605949402
-    },
-    {
-      "rank": 24,
-      "u": 2424024300,
-      "v": 5054636790,
-      "score": 0.7429291605949402
-    },
-    {
-      "rank": 25,
-      "u": 2424024298,
-      "v": 5054058325,
-      "score": 0.7429291605949402
-    }
-  ],
-  "params": {
-    "radius_m": 600.0,
-    "max_candidates": 250000,
-    "top_k": 25
-  }
+  ]
 }

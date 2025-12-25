@@ -8,12 +8,12 @@ import {
   Popup,
   useMap,
   useMapEvents,
-  GeoJSON, // <--- 1. Import GeoJSON
+  GeoJSON,
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Interface definitions...
+// --- Types ---
 interface LocationData {
   id: string;
   name: string;
@@ -28,10 +28,11 @@ interface MapComponentProps {
   center: [number, number];
   zoom: number;
   onMarkerClick: (location: LocationData) => void;
-  roadData?: any; // <--- 2. Add roadData prop (Type 'any' for GeoJSON feature collection)
+  existingRoads?: any; // Existing OSM Network
+  proposedRoads?: any; // Python Analysis Result
 }
 
-// ... [Keep MapController and getMarkerIcon exactly as they were] ...
+// --- Helper: Map Controller ---
 function MapController({
   selectedLocation,
   center,
@@ -68,8 +69,8 @@ function MapController({
   return null;
 }
 
+// --- Helper: Icons ---
 function getMarkerIcon(category: string, isSelected: boolean) {
-  // ... [Keep your existing icon logic] ...
   const colors: Record<string, string> = {
     restaurant: "#ef4444",
     hotel: "#3b82f6",
@@ -100,12 +101,14 @@ function getMarkerIcon(category: string, isSelected: boolean) {
   });
 }
 
+// --- Main Component ---
 export default function MapComponent({
   locations,
   center,
   zoom,
   onMarkerClick,
-  roadData, // <--- 3. Destructure roadData
+  existingRoads,
+  proposedRoads,
 }: MapComponentProps) {
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(null);
   const [currentZoom, setCurrentZoom] = useState(zoom);
@@ -113,27 +116,39 @@ export default function MapComponent({
   const [mapStyle, setMapStyle] = useState("streets");
   const [showControls, setShowControls] = useState(true);
 
-  // Style for the roads (Blue lines)
-  const roadStyle = {
-    color: mapStyle == "streets" || mapStyle == "light" ? "#000000" : "#FF9800",
-
-    // satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    // // Tailwind blue-600
-    weight: 1,
+  // Style 1: Existing Roads (Subtle Grey)
+  const existingRoadStyle = {
+    color: mapStyle == "streets" || mapStyle == "light" ? "#000000" : "#FF5B00", // Gray-500
+    weight: 1.5,
     opacity: 0.6,
+  };
+
+  // Style 2: Proposed Roads (Dynamic)
+  const getProposedStyle = (feature: any) => {
+    const type = feature.properties?.type;
+
+    if (type === "new_road") {
+      return {
+        color: "#DC2626", // Red-600
+        weight: 4,
+        opacity: 0.9,
+        dashArray: "10, 5", // Dashed line
+      };
+    } else if (type === "upgrade") {
+      return {
+        color: "#2563EB", // Blue-600
+        weight: 4,
+        opacity: 0.9,
+      };
+    }
+    return { color: "#3388ff", weight: 3 };
   };
 
   useEffect(() => {
     setCurrentCenter(center);
   }, [center]);
 
-  const handleMarkerClick = (location: LocationData) => {
-    setSelectedLocation(location);
-    onMarkerClick(location);
-  };
-
   const tileLayerUrl = (() => {
-    // ... [Keep your tile logic] ...
     const styles: Record<string, string> = {
       streets: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -144,7 +159,6 @@ export default function MapComponent({
   })();
 
   const getCategoryColor = (category: string) => {
-    // ... [Keep your category color logic] ...
     const colors: Record<string, string> = {
       restaurant: "bg-red-500",
       hotel: "bg-blue-500",
@@ -156,9 +170,15 @@ export default function MapComponent({
     return colors[category.toLowerCase()] || "bg-gray-500";
   };
 
+  const handleMarkerClick = (location: LocationData) => {
+    setSelectedLocation(location);
+    onMarkerClick(location);
+  };
+
   return (
     <div className="relative w-full h-full rounded-lg overflow-hidden shadow-xl border border-gray-200">
-      {/* ... [Keep Controls and Info Panel logic unchanged] ... */}
+
+      {/* Map Controls */}
       {showControls && (
         <div className="absolute top-4 right-4 z-[1000] bg-white rounded-lg shadow-lg p-2">
           <div className="flex gap-2">
@@ -178,8 +198,8 @@ export default function MapComponent({
         </div>
       )}
 
+      {/* Selected Location Card */}
       {selectedLocation && (
-        // ... [Keep Popup logic unchanged] ...
         <div className="absolute bottom-4 left-4 z-[1000] w-80 bg-white rounded-lg shadow-xl p-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
           <button
             onClick={() => setSelectedLocation(null)}
@@ -187,21 +207,25 @@ export default function MapComponent({
           >
             ✕
           </button>
-          <h3 className="font-bold text-lg mb-2 text-gray-800">{selectedLocation.name}</h3>
+          <h3 className="font-bold text-lg mb-2 text-gray-800">
+            {selectedLocation.name}
+          </h3>
           <p className="text-sm text-gray-600 mb-3 leading-relaxed">
             {selectedLocation.description}
           </p>
           <div className="flex items-center gap-2 mb-3">
-            <span className={`text-xs text-white px-3 py-1 rounded-full capitalize ${getCategoryColor(selectedLocation.category)}`}>
+            <span
+              className={`text-xs text-white px-3 py-1 rounded-full capitalize ${getCategoryColor(
+                selectedLocation.category
+              )}`}
+            >
               {selectedLocation.category}
             </span>
-          </div>
-          <div className="text-xs text-gray-400 font-mono">
-            📍 {Number(selectedLocation.latitude).toFixed(4)}, {Number(selectedLocation.longitude).toFixed(4)}
           </div>
         </div>
       )}
 
+      {/* Map Container */}
       <MapContainer
         center={center}
         zoom={zoom}
@@ -217,23 +241,46 @@ export default function MapComponent({
           onCenterChange={setCurrentCenter}
         />
 
-        {/* --- 4. Render Roads if data exists --- */}
-        {/* We use a key to force re-render when the data changes, usually React-Leaflet needs this */}
-        {roadData && (currentZoom >= 12) && (
+        {/* LAYER 1: EXISTING ROADS */}
+        {existingRoads && (
           <GeoJSON
-            key={JSON.stringify(roadData).length} // Simple hash to force update when data changes
-            data={roadData}
-            style={roadStyle}
+            key={`existing-${JSON.stringify(existingRoads).length}`}
+            data={existingRoads}
+            style={existingRoadStyle}
           />
         )}
 
+        {/* LAYER 2: PROPOSED ROADS */}
+        {proposedRoads && (
+          <GeoJSON
+            key={`proposed-${JSON.stringify(proposedRoads).length}`}
+            data={proposedRoads}
+            style={getProposedStyle}
+            onEachFeature={(feature, layer) => {
+              if (feature.properties) {
+                const { name, rank, score, type } = feature.properties;
+                const title = type === "new_road" ? "🆕 New Link Proposal" : "🚲 Upgrade Proposal";
+
+                layer.bindPopup(`
+                  <div class="text-sm">
+                    <strong class="block text-base mb-1">${title}</strong>
+                    <hr class="my-1"/>
+                    <span class="text-gray-600">Rank:</span> <b>${rank}</b><br/>
+                    <span class="text-gray-600">Score:</span> <b>${Number(score).toFixed(3)}</b>
+                  </div>
+                `);
+              }
+            }}
+          />
+        )}
+
+        {/* MARKERS */}
         {locations.map((location) => {
           if (!location.latitude || !location.longitude) return null;
-
           return (
             <Marker
               key={location.id}
-              position={[Number(location.latitude), Number(location.longitude)]}
+              position={[location.latitude, location.longitude]}
               icon={getMarkerIcon(
                 location.category,
                 selectedLocation?.id === location.id
@@ -243,9 +290,7 @@ export default function MapComponent({
               }}
             >
               <Popup>
-                <div className="p-1">
-                  <h3 className="font-bold text-sm">{location.name}</h3>
-                </div>
+                <div className="p-1 font-bold">{location.name}</div>
               </Popup>
             </Marker>
           );
