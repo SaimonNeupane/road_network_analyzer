@@ -10,8 +10,12 @@ export default function MapPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [locations, setLocations] = useState<LocationData[]>([]);
   const [roadData, setRoadData] = useState<any>(null); // <--- New State for Roads
-  const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
+    null
+  );
   const [loading, setLoading] = useState<boolean>(false);
+  const [district, setDistrict] = useState("");
+  const [place, setPlace] = useState("");
 
   // ... [Keep Radio Options same] ...
   const radioOptions: RadioOption[] = [
@@ -22,48 +26,113 @@ export default function MapPage() {
     { value: "education", label: "Education" },
   ];
 
+  // const handleSearch = async () => {
+  //   setLoading(true);
+  //   setRoadData(null); // Reset roads while loading new ones
+
+  //   try {
+  //     // 1. Fetch Locations
+  //     // We do this separately or concurrently.
+  //     // Let's do it concurrently to save time, but wrap roads in a try-catch
+  //     // so if roads fail (e.g. 404), markers still load.
+
+  //     const locationPromise = fetchLocations(searchText, selectedCategory);
+  //     const roadPromise = fetchRoads(searchText).catch(err => {
+  //       console.warn("Could not fetch roads:", err);
+  //       return { data: null }; // Return null if roads fail
+  //     });
+
+  //     const [locationRes, roadRes] = await Promise.all([locationPromise, roadPromise]);
+
+  //     // --- Process Location Data ---
+  //     const rawData = locationRes.data;
+  //     let dataToProcess: any[] = [];
+  //     if (Array.isArray(rawData)) {
+  //       dataToProcess = rawData;
+  //     } else if (rawData && typeof rawData === "object") {
+  //       dataToProcess = [rawData];
+  //     }
+  //     const sanitizedData = dataToProcess.map((loc: any) => ({
+  //       ...loc,
+  //       latitude: Number(loc.latitude),
+  //       longitude: Number(loc.longitude),
+  //     }));
+  //     setLocations(sanitizedData);
+
+  //     // --- Process Road Data ---
+  //     if (roadRes && roadRes.data) {
+  //       setRoadData(roadRes.data);
+  //     }
+
+  //     setSelectedLocation(null);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     setLocations([]);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const handleSearch = async () => {
     setLoading(true);
-    setRoadData(null); // Reset roads while loading new ones
+    setRoadData(null); // reset roads before new search
 
     try {
-      // 1. Fetch Locations
-      // We do this separately or concurrently. 
-      // Let's do it concurrently to save time, but wrap roads in a try-catch 
-      // so if roads fail (e.g. 404), markers still load.
+      // 🔹 Validate input (optional but recommended)
+      if (!district.trim() && !place.trim()) {
+        setLocations([]);
+        setRoadData(null);
+        return;
+      }
 
-      const locationPromise = fetchLocations(searchText, selectedCategory);
-      const roadPromise = fetchRoads(searchText).catch(err => {
-        console.warn("Could not fetch roads:", err);
-        return { data: null }; // Return null if roads fail
-      });
+      /**
+       * 1️⃣ Fetch locations using BOTH district & place
+       * 2️⃣ Fetch roads using PLACE only (roads are place-specific)
+       *    Roads are optional → markers should still load if roads fail
+       */
+      const locationPromise = fetchLocations(district.trim(), place.trim());
 
-      const [locationRes, roadRes] = await Promise.all([locationPromise, roadPromise]);
+      const roadPromise = place.trim()
+        ? fetchRoads(place.trim()).catch((err) => {
+            console.warn("Could not fetch roads:", err);
+            return { data: null };
+          })
+        : Promise.resolve({ data: null });
 
-      // --- Process Location Data ---
-      const rawData = locationRes.data;
+      const [locationRes, roadRes] = await Promise.all([
+        locationPromise,
+        roadPromise,
+      ]);
+
+      // ---------- Process Location Data ----------
+      const rawData = locationRes?.data;
       let dataToProcess: any[] = [];
+
       if (Array.isArray(rawData)) {
         dataToProcess = rawData;
       } else if (rawData && typeof rawData === "object") {
         dataToProcess = [rawData];
       }
+
       const sanitizedData = dataToProcess.map((loc: any) => ({
         ...loc,
         latitude: Number(loc.latitude),
         longitude: Number(loc.longitude),
       }));
+
       setLocations(sanitizedData);
 
-      // --- Process Road Data ---
-      if (roadRes && roadRes.data) {
+      // ---------- Process Road Data ----------
+      if (roadRes?.data) {
         setRoadData(roadRes.data);
+      } else {
+        setRoadData(null);
       }
 
       setSelectedLocation(null);
     } catch (error) {
       console.error("Error fetching data:", error);
       setLocations([]);
+      setRoadData(null);
     } finally {
       setLoading(false);
     }
