@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -10,7 +10,9 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
+// Interface definitions...
 interface LocationData {
   id: string;
   name: string;
@@ -27,13 +29,14 @@ interface MapComponentProps {
   onMarkerClick: (location: LocationData) => void;
 }
 
-// Custom component to handle map events and selected location
 function MapController({
   selectedLocation,
+  center,
   onZoomChange,
   onCenterChange,
 }: {
   selectedLocation: LocationData | null;
+  center: [number, number];
   onZoomChange: (zoom: number) => void;
   onCenterChange: (center: [number, number]) => void;
 }) {
@@ -47,26 +50,30 @@ function MapController({
     }
   }, [selectedLocation, map]);
 
+  useEffect(() => {
+    map.flyTo(center, map.getZoom());
+  }, [center, map]);
+
   useMapEvents({
-    zoomend: () => {
-      onZoomChange(map.getZoom());
-    },
+    zoomend: () => onZoomChange(map.getZoom()),
     moveend: () => {
-      const center = map.getCenter();
-      onCenterChange([center.lat, center.lng]);
+      const c = map.getCenter();
+      onCenterChange([c.lat, c.lng]);
     },
   });
 
   return null;
 }
 
-// Custom marker icons based on category and selection
+// FIX 3: Updated Marker Logic for visibility
 function getMarkerIcon(category: string, isSelected: boolean) {
   const colors: Record<string, string> = {
     restaurant: "#ef4444",
     hotel: "#3b82f6",
     attraction: "#10b981",
     shopping: "#f59e0b",
+    education: "#8b5cf6",
+    park: "#22c55e",
     default: "#8b5cf6",
   };
 
@@ -74,9 +81,11 @@ function getMarkerIcon(category: string, isSelected: boolean) {
   const scale = isSelected ? 1.3 : 1;
 
   return L.divIcon({
-    className: "custom-marker",
+    // IMPORTANT: 'bg-transparent' removes the white box Leaflet adds by default
+    // 'border-none' ensures no weird borders
+    className: "bg-transparent border-none",
     html: `
-        <div style="transform: scale(${scale}); transition: transform 0.2s;">
+        <div style="transform: scale(${scale}); transition: transform 0.2s; display: flex; align-items: center; justify-content: center;">
           <svg width="32" height="42" viewBox="0 0 32 42" style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
             <path d="M16 0C7.163 0 0 7.163 0 16c0 8.837 16 26 16 26s16-17.163 16-26C32 7.163 24.837 0 16 0z" 
                   fill="${color}" />
@@ -96,26 +105,21 @@ export default function MapComponent({
   zoom,
   onMarkerClick,
 }: MapComponentProps) {
-  const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
-    null
-  );
+  const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(null);
   const [currentZoom, setCurrentZoom] = useState(zoom);
   const [currentCenter, setCurrentCenter] = useState(center);
   const [mapStyle, setMapStyle] = useState("streets");
   const [showControls, setShowControls] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const mapRef = useRef<L.Map | null>(null);
 
-  // Filter locations based on search
-  const filteredLocations =
-    searchTerm.trim() === ""
-      ? locations
-      : locations.filter(
-        (loc) =>
-          loc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          loc.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          loc.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+  // Debugging: Check if locations are actually reaching here with numbers
+  useEffect(() => {
+    console.log("MapComponent received locations:", locations);
+  }, [locations]);
+
+  useEffect(() => {
+    setCurrentCenter(center);
+  }, [center]);
+
   const handleMarkerClick = (location: LocationData) => {
     setSelectedLocation(location);
     onMarkerClick(location);
@@ -124,56 +128,29 @@ export default function MapComponent({
   const tileLayerUrl = (() => {
     const styles: Record<string, string> = {
       streets: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      satellite:
-        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
       dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
       light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
     };
     return styles[mapStyle] || styles.streets;
   })();
 
-  const categoryColors: Record<string, string> = {
-    restaurant: "bg-red-500",
-    hotel: "bg-blue-500",
-    attraction: "bg-green-500",
-    shopping: "bg-orange-500",
-  };
-
   const getCategoryColor = (category: string) => {
-    return categoryColors[category.toLowerCase()] || "bg-purple-500";
+    const colors: Record<string, string> = {
+      restaurant: "bg-red-500",
+      hotel: "bg-blue-500",
+      attraction: "bg-green-500",
+      shopping: "bg-orange-500",
+      education: "bg-purple-500",
+      park: "bg-green-600",
+    };
+    return colors[category.toLowerCase()] || "bg-gray-500";
   };
 
   return (
-    <div className="relative w-full h-full">
-      {/* Search Bar */}
-      {/* <div className="absolute top-4 left-4 z-1000 w-80"> */}
-      {/*   <input */}
-      {/*     type="text" */}
-      {/*     placeholder="Search locations..." */}
-      {/*     value={searchTerm} */}
-      {/*     onChange={(e) => setSearchTerm(e.target.value)} */}
-      {/*     className="w-full px-4 py-2 rounded-lg shadow-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" */}
-      {/*   /> */}
-      {/*   {searchTerm && ( */}
-      {/*     <div className="mt-2 bg-white rounded-lg shadow-lg max-h-60 overflow-y-auto"> */}
-      {/*       {filteredLocations.map((loc) => ( */}
-      {/*         <div */}
-      {/*           key={loc.id} */}
-      {/*           onClick={() => { */}
-      {/*             handleMarkerClick(loc); */}
-      {/*             setSearchTerm(""); */}
-      {/*           }} */}
-      {/*           className="p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-0" */}
-      {/*         > */}
-      {/*           <div className="font-semibold text-sm">{loc.name}</div> */}
-      {/*           <div className="text-xs text-gray-600">{loc.category}</div> */}
-      {/*         </div> */}
-      {/*       ))} */}
-      {/*     </div> */}
-      {/*   )} */}
-      {/* </div> */}
-      {/**/}
-      {/* Map Style Selector */}
+    <div className="relative w-full h-full rounded-lg overflow-hidden shadow-xl border border-gray-200">
+
+      {/* Controls and Info Panel Code remains the same... */}
       {showControls && (
         <div className="absolute top-4 right-4 z-[1000] bg-white rounded-lg shadow-lg p-2">
           <div className="flex gap-2">
@@ -193,129 +170,70 @@ export default function MapComponent({
         </div>
       )}
 
-      {/* Info Panel */}
       {selectedLocation && (
-        <div className="absolute bottom-4 left-4 z-[1000] w-80 bg-white rounded-lg shadow-xl p-4">
+        <div className="absolute bottom-4 left-4 z-[1000] w-80 bg-white rounded-lg shadow-xl p-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
           <button
             onClick={() => setSelectedLocation(null)}
             className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
           >
             ✕
           </button>
-          <h3 className="font-bold text-lg mb-2">{selectedLocation.name}</h3>
-          <p className="text-sm text-gray-600 mb-3">
+          <h3 className="font-bold text-lg mb-2 text-gray-800">{selectedLocation.name}</h3>
+          <p className="text-sm text-gray-600 mb-3 leading-relaxed">
             {selectedLocation.description}
           </p>
           <div className="flex items-center gap-2 mb-3">
-            <span
-              className={`text-xs text-white px-3 py-1 rounded-full ${getCategoryColor(
-                selectedLocation.category
-              )}`}
-            >
+            <span className={`text-xs text-white px-3 py-1 rounded-full capitalize ${getCategoryColor(selectedLocation.category)}`}>
               {selectedLocation.category}
             </span>
           </div>
-          <div className="text-xs text-gray-500">
-            📍 {selectedLocation.latitude.toFixed(4)},{" "}
-            {selectedLocation.longitude.toFixed(4)}
+          <div className="text-xs text-gray-400 font-mono">
+            📍 {Number(selectedLocation.latitude).toFixed(4)}, {Number(selectedLocation.longitude).toFixed(4)}
           </div>
         </div>
       )}
-
-      {/* Stats Bar */}
-      {showControls && (
-        <div className="absolute bottom-4 right-4 z-[1000] bg-white rounded-lg shadow-lg px-4 py-2 flex items-center gap-4 text-xs">
-          <div>
-            <span className="text-gray-500">Zoom:</span>
-            <span className="font-mono ml-1 font-semibold">
-              {currentZoom.toFixed(1)}
-            </span>
-          </div>
-          <div className="border-l border-gray-300 pl-4">
-            <span className="text-gray-500">Locations:</span>
-            <span className="font-mono ml-1 font-semibold">
-              {filteredLocations.length}
-            </span>
-          </div>
-          <button
-            onClick={() => setShowControls(false)}
-            className="ml-2 text-gray-400 hover:text-gray-600"
-          >
-            ⚙️
-          </button>
-        </div>
-      )}
-
-      {/* Toggle Controls Button (when hidden) */}
-      {!showControls && (
-        <button
-          onClick={() => setShowControls(true)}
-          className="absolute bottom-4 right-4 z-[1000] bg-white rounded-lg shadow-lg p-3 hover:bg-gray-50"
-        >
-          ⚙️
-        </button>
-      )}
-
-      {/* Legend */}
-      <div className="absolute top-20 right-4 z-[1000] bg-white rounded-lg shadow-lg p-3 w-40">
-        <h4 className="font-semibold text-xs mb-2">Categories</h4>
-        {Array.from(new Set(locations.map((l) => l.category))).map(
-          (category) => (
-            <div key={category} className="flex items-center gap-2 mb-1">
-              <div
-                className={`w-3 h-3 rounded-full ${getCategoryColor(category)}`}
-              />
-              <span className="text-xs">{category}</span>
-            </div>
-          )
-        )}
-      </div>
 
       {/* Map Container */}
       <MapContainer
-        center={currentCenter}
+        center={center}
         zoom={zoom}
         className="w-full h-full"
-        ref={mapRef}
         zoomControl={false}
       >
         <TileLayer url={tileLayerUrl} attribution="© Map Data" />
 
         <MapController
           selectedLocation={selectedLocation}
+          center={currentCenter}
           onZoomChange={setCurrentZoom}
           onCenterChange={setCurrentCenter}
         />
 
-        {filteredLocations.map((location) => (
-          <Marker
-            key={location.id}
-            position={[location.latitude, location.longitude]}
-            icon={getMarkerIcon(
-              location.category,
-              selectedLocation?.id === location.id
-            )}
-            eventHandlers={{
-              click: () => handleMarkerClick(location),
-            }}
-          >
-            <Popup>
-              <div className="p-2">
-                <h3 className="font-bold text-sm mb-1">{location.name}</h3>
-                <p className="text-xs text-gray-600 mb-2">
-                  {location.description}
-                </p>
-                <span
-                  className={`text-xs text-white px-2 py-1 rounded ${getCategoryColor(
-                    location.category
-                  )}`}
-                >
-                  {location.category}
-                </span>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {locations.map((location) => {
+          // Extra Safety Check before rendering marker
+          if (!location.latitude || !location.longitude) return null;
+
+          return (
+            <Marker
+              key={location.id}
+              // Ensure these are strictly numbers
+              position={[Number(location.latitude), Number(location.longitude)]}
+              icon={getMarkerIcon(
+                location.category,
+                selectedLocation?.id === location.id
+              )}
+              eventHandlers={{
+                click: () => handleMarkerClick(location),
+              }}
+            >
+              <Popup>
+                <div className="p-1">
+                  <h3 className="font-bold text-sm">{location.name}</h3>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
     </div>
   );
