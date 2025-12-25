@@ -20,7 +20,7 @@ import torch.nn.functional as F
 from scipy.spatial import cKDTree
 from torch_geometric.data import Data
 from torch_geometric.nn import SAGEConv
-from shapely.geometry import LineString, mapping  # Required for GeoJSON
+from shapely.geometry import LineString, mapping
 
 
 # ----------------------------- Config ---------------------------------
@@ -305,11 +305,11 @@ def main():
         Path(cfg.artifacts_dir) / "cycleway_edgeclf_meta.pt", map_location="cpu"
     )
 
-    # 1. DOWNLOAD RAW GRAPH (LAT/LON) - KEEP THIS FOR FINAL EXPORT!
+    # 1. DOWNLOAD RAW GRAPH (LAT/LON)
     print(f"Downloading Place data for {cfg.place_target}...")
     G_raw = ox.graph_from_place(cfg.place_target, network_type="drive", simplify=True)
 
-    # 2. CREATE PROJECTED GRAPH (METERS) - USE THIS FOR MATH/AI
+    # 2. CREATE PROJECTED GRAPH (METERS)
     G_drive = ox.project_graph(G_raw)
     print(f"✓ Graph: {len(G_drive.nodes)} nodes, {len(G_drive.edges)} edges")
 
@@ -349,7 +349,7 @@ def main():
     )
     cw_model.eval()
 
-    # --- Inference: Cycleways ---
+    # --- INFERENCE 1: Existing Edges (Logic Inversion: Force Straight) ---
     print("Scoring existing edges...")
     edge_keys, edge_attr = fb.edge_attr_for_drive_edges(
         G_drive, meta_lp["highway_vocab"]
@@ -383,14 +383,21 @@ def main():
             )
     scores = torch.cat(scores).numpy()
 
-    top_cycle_edges = []
+    # Store top existing edges
+    top_existing_edges = []
     for rank, idx in enumerate(np.argsort(-scores)[: cfg.top_k], 1):
         u, v, k = edge_keys[idx]
-        top_cycle_edges.append(
-            {"rank": rank, "u": int(u), "v": int(v), "score": float(scores[idx])}
+        top_existing_edges.append(
+            {
+                "rank": rank,
+                "u": int(u),
+                "v": int(v),
+                "k": k,
+                "score": float(scores[idx]),
+            }
         )
 
-    # --- Inference: New Roads ---
+    # --- INFERENCE 2: Link Prediction (Logic Inversion: Force Curved) ---
     print("Generating/Scoring candidates...")
     cand_index = generate_radius_candidates(
         G_drive, ds, cfg.radius_m, cfg.max_candidates, cfg.seed
@@ -405,23 +412,74 @@ def main():
             )
     cand_scores = torch.cat(cand_scores).numpy()
 
-    top_new_roads = []
+    # Store top new links
+    top_new_links = []
     for rank, idx in enumerate(np.argsort(-cand_scores)[: cfg.top_k], 1):
         u = int(ds.idx_to_node[cand_index[0, idx].item()])
         v = int(ds.idx_to_node[cand_index[1, idx].item()])
-        top_new_roads.append(
+        top_new_links.append(
             {"rank": rank, "u": u, "v": v, "score": float(cand_scores[idx])}
         )
 
-    # --- GeoJSON Export (CRITICAL FIX: Use G_raw for Lat/Lon) ---
+    # --- GeoJSON Export (INVERTED GEOMETRY & TYPES) ---
     print("Exporting GeoJSON...")
     features = []
 
-    # Helper to add feature
-    def add_feature(item, f_type, label):
+    # 1. LINK PREDICTION -> Rendered as CURVED LINESTRINGS (The "New Driveways")
+    # We use shortest_path on the existing graph to simulate a road-like curve
+    for item in top_new_links:
+        u, v = item["u"], item["v"]
+        if u in G_drive.nodes and v in G_drive.nodes:
+            try:
+                # Calculate path in projected graph (meters)
+                path_nodes = nx.shortest_path(G_drive, u, v, weight="length")
+
+                # Convert path nodes to Lat/Lon from G_raw
+                path_coords = []
+                valid_path = True
+                for n in path_nodes:
+                    if n in G_raw.nodes:
+                        path_coords.append((G_raw.nodes[n]["x"], G_raw.nodes[n]["y"]))
+                    else:
+                        valid_path = False
+                        break
+
+                if valid_path and len(path_coords) >= 2:
+                    features.append(
+                        {
+                            "type": "Feature",
+                            "geometry": mapping(LineString(path_coords)),
+                            "properties": {
+                                "type": "new_driveway",  # Label as Driveway (Curved)
+                                "rank": item["rank"],
+                                "score": item["score"],
+                                "name": f"Proposed Road Expansion #{item['rank']}",
+                            },
+                        }
+                    )
+            except nx.NetworkXNoPath:
+                # Fallback to straight line if unconnected
+                if u in G_raw.nodes and v in G_raw.nodes:
+                    p1 = (G_raw.nodes[u]["x"], G_raw.nodes[u]["y"])
+                    p2 = (G_raw.nodes[v]["x"], G_raw.nodes[v]["y"])
+                    features.append(
+                        {
+                            "type": "Feature",
+                            "geometry": mapping(LineString([p1, p2])),
+                            "properties": {
+                                "type": "new_driveway",
+                                "rank": item["rank"],
+                                "score": item["score"],
+                                "name": f"Proposed Road Expansion #{item['rank']}",
+                            },
+                        }
+                    )
+
+    # 2. EXISTING EDGES -> Rendered as STRAIGHT LINES (The "New Cycleways")
+    # We ignore the actual geometry and draw a straight line between u and v
+    for item in top_existing_edges:
         u, v = item["u"], item["v"]
         if u in G_raw.nodes and v in G_raw.nodes:
-            # Use G_raw to get Longitude (x) and Latitude (y)
             p1 = (G_raw.nodes[u]["x"], G_raw.nodes[u]["y"])
             p2 = (G_raw.nodes[v]["x"], G_raw.nodes[v]["y"])
             features.append(
@@ -429,19 +487,13 @@ def main():
                     "type": "Feature",
                     "geometry": mapping(LineString([p1, p2])),
                     "properties": {
-                        "type": f_type,
+                        "type": "new_cycleway",  # Label as Cycleway (Straight)
                         "rank": item["rank"],
                         "score": item["score"],
-                        "name": f"{label} #{item['rank']}",
+                        "name": f"Proposed Cycle Shortcut #{item['rank']}",
                     },
                 }
             )
-
-    for item in top_new_roads:
-        add_feature(item, "new_road", "Proposed Road")
-
-    for item in top_cycle_edges:
-        add_feature(item, "upgrade", "Upgrade Proposal")
 
     out_path = Path("outputs") / "recommendations.json"
     out_path.parent.mkdir(exist_ok=True)

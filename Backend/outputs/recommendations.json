@@ -11,16 +11,28 @@
             27.6164721
           ],
           [
+            85.5471441,
+            27.6169349
+          ],
+          [
+            85.5482891,
+            27.6171792
+          ],
+          [
+            85.5501021,
+            27.6185188
+          ],
+          [
             85.5500945,
             27.6186223
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 1,
         "score": 0.8886147737503052,
-        "name": "Proposed Road #1"
+        "name": "Proposed Road Expansion #1"
       }
     },
     {
@@ -33,16 +45,24 @@
             27.6186223
           ],
           [
+            85.5501021,
+            27.6185188
+          ],
+          [
+            85.5482891,
+            27.6171792
+          ],
+          [
             85.5471441,
             27.6169349
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 2,
         "score": 0.8650217652320862,
-        "name": "Proposed Road #2"
+        "name": "Proposed Road Expansion #2"
       }
     },
     {
@@ -55,16 +75,20 @@
             27.6242842
           ],
           [
+            85.5492355,
+            27.6242448
+          ],
+          [
             85.5486729,
             27.6246656
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 3,
         "score": 0.8527336716651917,
-        "name": "Proposed Road #3"
+        "name": "Proposed Road Expansion #3"
       }
     },
     {
@@ -77,16 +101,40 @@
             27.6186223
           ],
           [
+            85.5501021,
+            27.6185188
+          ],
+          [
+            85.5482891,
+            27.6171792
+          ],
+          [
+            85.5471441,
+            27.6169349
+          ],
+          [
+            85.5473442,
+            27.6165147
+          ],
+          [
+            85.5472287,
+            27.616346
+          ],
+          [
+            85.5467911,
+            27.616159
+          ],
+          [
             85.5466472,
             27.6162503
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 4,
         "score": 0.8495440483093262,
-        "name": "Proposed Road #4"
+        "name": "Proposed Road Expansion #4"
       }
     },
     {
@@ -99,16 +147,24 @@
             27.6244235
           ],
           [
+            85.5492972,
+            27.6242842
+          ],
+          [
+            85.5492355,
+            27.6242448
+          ],
+          [
             85.5486729,
             27.6246656
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 5,
         "score": 0.842616856098175,
-        "name": "Proposed Road #5"
+        "name": "Proposed Road Expansion #5"
       }
     },
     {
@@ -121,16 +177,24 @@
             27.6164721
           ],
           [
+            85.5471441,
+            27.6169349
+          ],
+          [
+            85.5482891,
+            27.6171792
+          ],
+          [
             85.5501021,
             27.6185188
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 6,
         "score": 0.8416084051132202,
-        "name": "Proposed Road #6"
+        "name": "Proposed Road Expansion #6"
       }
     },
     {
@@ -143,16 +207,20 @@
             27.6258077
           ],
           [
+            85.5382281,
+            27.6256408
+          ],
+          [
             85.5381346,
             27.6252876
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 7,
         "score": 0.8413004875183105,
-        "name": "Proposed Road #7"
+        "name": "Proposed Road Expansion #7"
       }
     },
     {
@@ -165,16 +233,40 @@
             27.6204123
           ],
           [
+            85.5532991,
+            27.62075
+          ],
+          [
+            85.5533738,
+            27.621273
+          ],
+          [
+            85.5531536,
+            27.6217023
+          ],
+          [
+            85.5525332,
+            27.6221765
+          ],
+          [
+            85.551854,
+            27.6230849
+          ],
+          [
+            85.550162,
+            27.6235838
+          ],
+          [
             85.5492972,
             27.6242842
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 8,
         "score": 0.8406872749328613,
-        "name": "Proposed Road #8"
+        "name": "Proposed Road Expansion #8"
       }
     },
     {
@@ -187,16 +279,28 @@
             27.6265436
           ],
           [
+            85.5463133,
+            27.6253934
+          ],
+          [
+            85.5470401,
+            27.6253587
+          ],
+          [
+            85.5487675,
+            27.6247412
+          ],
+          [
             85.5486729,
             27.6246656
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 9,
         "score": 0.834645688533783,
-        "name": "Proposed Road #9"
+        "name": "Proposed Road Expansion #9"
       }
     },
     {
@@ -209,16 +313,44 @@
             27.6214716
           ],
           [
+            85.5414085,
+            27.6216727
+          ],
+          [
+            85.54137,
+            27.6232831
+          ],
+          [
+            85.5410328,
+            27.6248565
+          ],
+          [
+            85.5410026,
+            27.6250842
+          ],
+          [
+            85.5408513,
+            27.62511
+          ],
+          [
+            85.5394381,
+            27.6267171
+          ],
+          [
+            85.5383611,
+            27.6269127
+          ],
+          [
             85.5382715,
             27.6258077
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 10,
         "score": 0.8334662914276123,
-        "name": "Proposed Road #10"
+        "name": "Proposed Road Expansion #10"
       }
     },
     {
@@ -231,16 +363,28 @@
             27.6250842
           ],
           [
+            85.5408513,
+            27.62511
+          ],
+          [
+            85.5394381,
+            27.6267171
+          ],
+          [
+            85.5383611,
+            27.6269127
+          ],
+          [
             85.5382715,
             27.6258077
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 11,
         "score": 0.8334662914276123,
-        "name": "Proposed Road #11"
+        "name": "Proposed Road Expansion #11"
       }
     },
     {
@@ -253,16 +397,32 @@
             27.6181309
           ],
           [
+            85.5468878,
+            27.6183793
+          ],
+          [
+            85.5479374,
+            27.6189529
+          ],
+          [
+            85.548004,
+            27.6189961
+          ],
+          [
+            85.5493429,
+            27.6186271
+          ],
+          [
             85.5500945,
             27.6186223
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 12,
         "score": 0.8331265449523926,
-        "name": "Proposed Road #12"
+        "name": "Proposed Road Expansion #12"
       }
     },
     {
@@ -275,16 +435,20 @@
             27.6267171
           ],
           [
+            85.5383611,
+            27.6269127
+          ],
+          [
             85.5382715,
             27.6258077
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 13,
         "score": 0.8323389887809753,
-        "name": "Proposed Road #13"
+        "name": "Proposed Road Expansion #13"
       }
     },
     {
@@ -297,16 +461,20 @@
             27.6186223
           ],
           [
+            85.5501021,
+            27.6185188
+          ],
+          [
             85.5482891,
             27.6171792
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 14,
         "score": 0.8310750126838684,
-        "name": "Proposed Road #14"
+        "name": "Proposed Road Expansion #14"
       }
     },
     {
@@ -319,16 +487,52 @@
             27.6216074
           ],
           [
+            85.5379624,
+            27.6217765
+          ],
+          [
+            85.5395044,
+            27.6232832
+          ],
+          [
+            85.5398181,
+            27.6234309
+          ],
+          [
+            85.5400862,
+            27.624264
+          ],
+          [
+            85.5410328,
+            27.6248565
+          ],
+          [
+            85.5410026,
+            27.6250842
+          ],
+          [
+            85.5408513,
+            27.62511
+          ],
+          [
+            85.5394381,
+            27.6267171
+          ],
+          [
+            85.5383611,
+            27.6269127
+          ],
+          [
             85.5382715,
             27.6258077
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 15,
         "score": 0.8298261761665344,
-        "name": "Proposed Road #15"
+        "name": "Proposed Road Expansion #15"
       }
     },
     {
@@ -341,16 +545,24 @@
             27.62511
           ],
           [
+            85.5394381,
+            27.6267171
+          ],
+          [
+            85.5383611,
+            27.6269127
+          ],
+          [
             85.5382715,
             27.6258077
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 16,
         "score": 0.8298261761665344,
-        "name": "Proposed Road #16"
+        "name": "Proposed Road Expansion #16"
       }
     },
     {
@@ -363,16 +575,52 @@
             27.6214716
           ],
           [
+            85.5414085,
+            27.6216727
+          ],
+          [
+            85.54137,
+            27.6232831
+          ],
+          [
+            85.5410328,
+            27.6248565
+          ],
+          [
+            85.5410026,
+            27.6250842
+          ],
+          [
+            85.5408513,
+            27.62511
+          ],
+          [
+            85.5394381,
+            27.6267171
+          ],
+          [
+            85.5383611,
+            27.6269127
+          ],
+          [
+            85.5382715,
+            27.6258077
+          ],
+          [
+            85.5382281,
+            27.6256408
+          ],
+          [
             85.5381346,
             27.6252876
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 17,
         "score": 0.8288662433624268,
-        "name": "Proposed Road #17"
+        "name": "Proposed Road Expansion #17"
       }
     },
     {
@@ -385,16 +633,28 @@
             27.6267171
           ],
           [
+            85.5383611,
+            27.6269127
+          ],
+          [
+            85.5382715,
+            27.6258077
+          ],
+          [
+            85.5382281,
+            27.6256408
+          ],
+          [
             85.5381346,
             27.6252876
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 18,
         "score": 0.8281717300415039,
-        "name": "Proposed Road #18"
+        "name": "Proposed Road Expansion #18"
       }
     },
     {
@@ -405,6 +665,14 @@
           [
             85.5486729,
             27.6246656
+          ],
+          [
+            85.5487675,
+            27.6247412
+          ],
+          [
+            85.5470401,
+            27.6253587
           ],
           [
             85.5463133,
@@ -413,10 +681,10 @@
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 19,
         "score": 0.8281619548797607,
-        "name": "Proposed Road #19"
+        "name": "Proposed Road Expansion #19"
       }
     },
     {
@@ -429,16 +697,44 @@
             27.6246656
           ],
           [
+            85.5487675,
+            27.6247412
+          ],
+          [
+            85.5470401,
+            27.6253587
+          ],
+          [
+            85.5463133,
+            27.6253934
+          ],
+          [
+            85.545876,
+            27.6254444
+          ],
+          [
+            85.5457704,
+            27.6250407
+          ],
+          [
+            85.5454919,
+            27.6241943
+          ],
+          [
+            85.544333,
+            27.6239807
+          ],
+          [
             85.5433979,
             27.6242669
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 20,
         "score": 0.8281619548797607,
-        "name": "Proposed Road #20"
+        "name": "Proposed Road Expansion #20"
       }
     },
     {
@@ -449,6 +745,34 @@
           [
             85.5486729,
             27.6246656
+          ],
+          [
+            85.5487675,
+            27.6247412
+          ],
+          [
+            85.5470401,
+            27.6253587
+          ],
+          [
+            85.5463133,
+            27.6253934
+          ],
+          [
+            85.545876,
+            27.6254444
+          ],
+          [
+            85.5457704,
+            27.6250407
+          ],
+          [
+            85.5454919,
+            27.6241943
+          ],
+          [
+            85.544333,
+            27.6239807
           ],
           [
             85.5441907,
@@ -457,10 +781,10 @@
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 21,
         "score": 0.8281619548797607,
-        "name": "Proposed Road #21"
+        "name": "Proposed Road Expansion #21"
       }
     },
     {
@@ -473,16 +797,48 @@
             27.6246656
           ],
           [
+            85.5487675,
+            27.6247412
+          ],
+          [
+            85.5470401,
+            27.6253587
+          ],
+          [
+            85.5463133,
+            27.6253934
+          ],
+          [
+            85.545876,
+            27.6254444
+          ],
+          [
+            85.5457704,
+            27.6250407
+          ],
+          [
+            85.5454919,
+            27.6241943
+          ],
+          [
+            85.544333,
+            27.6239807
+          ],
+          [
+            85.5433979,
+            27.6242669
+          ],
+          [
             85.543358,
             27.6242136
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 22,
         "score": 0.8281619548797607,
-        "name": "Proposed Road #22"
+        "name": "Proposed Road Expansion #22"
       }
     },
     {
@@ -493,6 +849,30 @@
           [
             85.5486729,
             27.6246656
+          ],
+          [
+            85.5487675,
+            27.6247412
+          ],
+          [
+            85.5470401,
+            27.6253587
+          ],
+          [
+            85.5463133,
+            27.6253934
+          ],
+          [
+            85.545876,
+            27.6254444
+          ],
+          [
+            85.5457704,
+            27.6250407
+          ],
+          [
+            85.5454919,
+            27.6241943
           ],
           [
             85.544333,
@@ -501,10 +881,10 @@
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 23,
         "score": 0.8281619548797607,
-        "name": "Proposed Road #23"
+        "name": "Proposed Road Expansion #23"
       }
     },
     {
@@ -515,6 +895,38 @@
           [
             85.5382715,
             27.6258077
+          ],
+          [
+            85.5383611,
+            27.6269127
+          ],
+          [
+            85.5394381,
+            27.6267171
+          ],
+          [
+            85.5408513,
+            27.62511
+          ],
+          [
+            85.5410026,
+            27.6250842
+          ],
+          [
+            85.5412781,
+            27.6250988
+          ],
+          [
+            85.5422143,
+            27.6242624
+          ],
+          [
+            85.5428015,
+            27.6238768
+          ],
+          [
+            85.543358,
+            27.6242136
           ],
           [
             85.5433979,
@@ -523,10 +935,10 @@
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 24,
         "score": 0.8272377252578735,
-        "name": "Proposed Road #24"
+        "name": "Proposed Road Expansion #24"
       }
     },
     {
@@ -539,16 +951,44 @@
             27.6258077
           ],
           [
+            85.5383611,
+            27.6269127
+          ],
+          [
+            85.5394381,
+            27.6267171
+          ],
+          [
+            85.5408513,
+            27.62511
+          ],
+          [
+            85.5410026,
+            27.6250842
+          ],
+          [
+            85.5412781,
+            27.6250988
+          ],
+          [
+            85.5422143,
+            27.6242624
+          ],
+          [
+            85.5428015,
+            27.6238768
+          ],
+          [
             85.543358,
             27.6242136
           ]
         ]
       },
       "properties": {
-        "type": "new_road",
+        "type": "new_driveway",
         "rank": 25,
         "score": 0.8272377252578735,
-        "name": "Proposed Road #25"
+        "name": "Proposed Road Expansion #25"
       }
     },
     {
@@ -567,10 +1007,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 1,
         "score": 0.4249308407306671,
-        "name": "Upgrade Proposal #1"
+        "name": "Proposed Cycle Shortcut #1"
       }
     },
     {
@@ -589,10 +1029,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 2,
         "score": 0.42091503739356995,
-        "name": "Upgrade Proposal #2"
+        "name": "Proposed Cycle Shortcut #2"
       }
     },
     {
@@ -611,10 +1051,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 3,
         "score": 0.4124516248703003,
-        "name": "Upgrade Proposal #3"
+        "name": "Proposed Cycle Shortcut #3"
       }
     },
     {
@@ -633,10 +1073,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 4,
         "score": 0.40833842754364014,
-        "name": "Upgrade Proposal #4"
+        "name": "Proposed Cycle Shortcut #4"
       }
     },
     {
@@ -655,10 +1095,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 5,
         "score": 0.4077565371990204,
-        "name": "Upgrade Proposal #5"
+        "name": "Proposed Cycle Shortcut #5"
       }
     },
     {
@@ -677,10 +1117,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 6,
         "score": 0.4076409339904785,
-        "name": "Upgrade Proposal #6"
+        "name": "Proposed Cycle Shortcut #6"
       }
     },
     {
@@ -699,10 +1139,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 7,
         "score": 0.4070183038711548,
-        "name": "Upgrade Proposal #7"
+        "name": "Proposed Cycle Shortcut #7"
       }
     },
     {
@@ -721,10 +1161,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 8,
         "score": 0.4058704376220703,
-        "name": "Upgrade Proposal #8"
+        "name": "Proposed Cycle Shortcut #8"
       }
     },
     {
@@ -743,10 +1183,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 9,
         "score": 0.40529677271842957,
-        "name": "Upgrade Proposal #9"
+        "name": "Proposed Cycle Shortcut #9"
       }
     },
     {
@@ -765,10 +1205,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 10,
         "score": 0.404949814081192,
-        "name": "Upgrade Proposal #10"
+        "name": "Proposed Cycle Shortcut #10"
       }
     },
     {
@@ -787,10 +1227,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 11,
         "score": 0.40330153703689575,
-        "name": "Upgrade Proposal #11"
+        "name": "Proposed Cycle Shortcut #11"
       }
     },
     {
@@ -809,10 +1249,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 12,
         "score": 0.4031285345554352,
-        "name": "Upgrade Proposal #12"
+        "name": "Proposed Cycle Shortcut #12"
       }
     },
     {
@@ -831,10 +1271,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 13,
         "score": 0.403067022562027,
-        "name": "Upgrade Proposal #13"
+        "name": "Proposed Cycle Shortcut #13"
       }
     },
     {
@@ -853,10 +1293,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 14,
         "score": 0.4028104543685913,
-        "name": "Upgrade Proposal #14"
+        "name": "Proposed Cycle Shortcut #14"
       }
     },
     {
@@ -875,10 +1315,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 15,
         "score": 0.4027785360813141,
-        "name": "Upgrade Proposal #15"
+        "name": "Proposed Cycle Shortcut #15"
       }
     },
     {
@@ -897,10 +1337,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 16,
         "score": 0.40273767709732056,
-        "name": "Upgrade Proposal #16"
+        "name": "Proposed Cycle Shortcut #16"
       }
     },
     {
@@ -919,10 +1359,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 17,
         "score": 0.40259885787963867,
-        "name": "Upgrade Proposal #17"
+        "name": "Proposed Cycle Shortcut #17"
       }
     },
     {
@@ -941,10 +1381,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 18,
         "score": 0.4025801122188568,
-        "name": "Upgrade Proposal #18"
+        "name": "Proposed Cycle Shortcut #18"
       }
     },
     {
@@ -963,10 +1403,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 19,
         "score": 0.40252822637557983,
-        "name": "Upgrade Proposal #19"
+        "name": "Proposed Cycle Shortcut #19"
       }
     },
     {
@@ -985,10 +1425,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 20,
         "score": 0.4023481607437134,
-        "name": "Upgrade Proposal #20"
+        "name": "Proposed Cycle Shortcut #20"
       }
     },
     {
@@ -1007,10 +1447,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 21,
         "score": 0.4022616446018219,
-        "name": "Upgrade Proposal #21"
+        "name": "Proposed Cycle Shortcut #21"
       }
     },
     {
@@ -1029,10 +1469,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 22,
         "score": 0.40217748284339905,
-        "name": "Upgrade Proposal #22"
+        "name": "Proposed Cycle Shortcut #22"
       }
     },
     {
@@ -1051,10 +1491,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 23,
         "score": 0.4021342098712921,
-        "name": "Upgrade Proposal #23"
+        "name": "Proposed Cycle Shortcut #23"
       }
     },
     {
@@ -1073,10 +1513,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 24,
         "score": 0.4020930826663971,
-        "name": "Upgrade Proposal #24"
+        "name": "Proposed Cycle Shortcut #24"
       }
     },
     {
@@ -1095,10 +1535,10 @@
         ]
       },
       "properties": {
-        "type": "upgrade",
+        "type": "new_cycleway",
         "rank": 25,
         "score": 0.40200555324554443,
-        "name": "Upgrade Proposal #25"
+        "name": "Proposed Cycle Shortcut #25"
       }
     }
   ]

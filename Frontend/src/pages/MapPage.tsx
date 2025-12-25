@@ -58,14 +58,16 @@ export default function MapPage() {
       ]);
 
       // --- Process Markers ---
-      const rawData = locationRes.data;
-      const dataToProcess = Array.isArray(rawData) ? rawData : [rawData];
-      const sanitizedData = dataToProcess.map((loc: any) => ({
-        ...loc,
-        latitude: Number(loc.latitude),
-        longitude: Number(loc.longitude),
-      }));
-      setLocations(sanitizedData);
+      if (locationRes.data) {
+        const rawData = locationRes.data;
+        const dataToProcess = Array.isArray(rawData) ? rawData : [rawData];
+        const sanitizedData = dataToProcess.map((loc: any) => ({
+          ...loc,
+          latitude: Number(loc.latitude),
+          longitude: Number(loc.longitude),
+        })).filter((loc: any) => !isNaN(loc.latitude) && !isNaN(loc.longitude));
+        setLocations(sanitizedData);
+      }
 
       // --- Process Existing Roads ---
       if (roadsRes.data) {
@@ -75,7 +77,11 @@ export default function MapPage() {
       // --- Process Proposed Roads ---
       if (proposedRes.data) {
         console.log("Proposed Data Received:", proposedRes.data);
-        setProposedRoads(proposedRes.data);
+        if (proposedRes.data.features && Array.isArray(proposedRes.data.features)) {
+          setProposedRoads(proposedRes.data);
+        } else {
+          console.warn("Invalid Proposed Roads Format:", proposedRes.data);
+        }
       }
 
       setSelectedLocation(null);
@@ -121,7 +127,7 @@ export default function MapPage() {
           <button
             onClick={handleSearch}
             disabled={loading}
-            className={`w-full py-2 rounded text-white transition ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+            className={`w-full py-2 rounded text-white transition font-medium ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
               }`}
           >
             {loading ? "Calculating..." : "Find Proposed Roads"}
@@ -146,23 +152,23 @@ export default function MapPage() {
         {loading ? (
           <div className="w-full h-full flex items-center justify-center bg-white rounded-lg shadow-lg">
             <div className="text-center">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-              <p className="text-gray-600 font-medium">Running GNN Inference...</p>
-              <p className="text-xs text-gray-400">This may take a few seconds</p>
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
+              <p className="text-gray-800 font-bold text-lg">Running GNN Inference...</p>
+              <p className="text-sm text-gray-500 mt-2">Calculating road geometries & inverting topology</p>
             </div>
           </div>
         ) : (
           <MapComponent
             locations={locations}
-            existingRoads={existingRoads} // Pass existing layer
-            proposedRoads={proposedRoads} // Pass proposed layer
+            existingRoads={existingRoads}
+            proposedRoads={proposedRoads}
             onMarkerClick={setSelectedLocation}
             center={
               locations.length > 0
                 ? [locations[0].latitude, locations[0].longitude]
                 : [27.6253, 85.5561]
             }
-            zoom={13}
+            zoom={14}
           />
         )}
       </div>
