@@ -11,7 +11,7 @@ export default function MapPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [locations, setLocations] = useState<LocationData[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
-    null
+    'dhulikhel'
   );
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -26,7 +26,8 @@ export default function MapPage() {
     setLoading(true);
     try {
       const results = await fetchLocations(searchText, selectedCategory);
-      setLocations(results);
+      console.log(results)
+      // setLocations(results);
       setSelectedLocation(null);
     } catch (error) {
       console.error("Error fetching locations:", error);
