@@ -8,6 +8,7 @@ import {
   Popup,
   useMap,
   useMapEvents,
+  GeoJSON, // <--- 1. Import GeoJSON
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -27,8 +28,10 @@ interface MapComponentProps {
   center: [number, number];
   zoom: number;
   onMarkerClick: (location: LocationData) => void;
+  roadData?: any; // <--- 2. Add roadData prop (Type 'any' for GeoJSON feature collection)
 }
 
+// ... [Keep MapController and getMarkerIcon exactly as they were] ...
 function MapController({
   selectedLocation,
   center,
@@ -65,8 +68,8 @@ function MapController({
   return null;
 }
 
-// FIX 3: Updated Marker Logic for visibility
 function getMarkerIcon(category: string, isSelected: boolean) {
+  // ... [Keep your existing icon logic] ...
   const colors: Record<string, string> = {
     restaurant: "#ef4444",
     hotel: "#3b82f6",
@@ -81,8 +84,6 @@ function getMarkerIcon(category: string, isSelected: boolean) {
   const scale = isSelected ? 1.3 : 1;
 
   return L.divIcon({
-    // IMPORTANT: 'bg-transparent' removes the white box Leaflet adds by default
-    // 'border-none' ensures no weird borders
     className: "bg-transparent border-none",
     html: `
         <div style="transform: scale(${scale}); transition: transform 0.2s; display: flex; align-items: center; justify-content: center;">
@@ -104,6 +105,7 @@ export default function MapComponent({
   center,
   zoom,
   onMarkerClick,
+  roadData, // <--- 3. Destructure roadData
 }: MapComponentProps) {
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(null);
   const [currentZoom, setCurrentZoom] = useState(zoom);
@@ -111,10 +113,12 @@ export default function MapComponent({
   const [mapStyle, setMapStyle] = useState("streets");
   const [showControls, setShowControls] = useState(true);
 
-  // Debugging: Check if locations are actually reaching here with numbers
-  useEffect(() => {
-    console.log("MapComponent received locations:", locations);
-  }, [locations]);
+  // Style for the roads (Blue lines)
+  const roadStyle = {
+    color: "#000000", // Tailwind blue-600
+    weight: 1,
+    opacity: 0.6,
+  };
 
   useEffect(() => {
     setCurrentCenter(center);
@@ -126,6 +130,7 @@ export default function MapComponent({
   };
 
   const tileLayerUrl = (() => {
+    // ... [Keep your tile logic] ...
     const styles: Record<string, string> = {
       streets: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       satellite: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
@@ -136,6 +141,7 @@ export default function MapComponent({
   })();
 
   const getCategoryColor = (category: string) => {
+    // ... [Keep your category color logic] ...
     const colors: Record<string, string> = {
       restaurant: "bg-red-500",
       hotel: "bg-blue-500",
@@ -149,8 +155,7 @@ export default function MapComponent({
 
   return (
     <div className="relative w-full h-full rounded-lg overflow-hidden shadow-xl border border-gray-200">
-
-      {/* Controls and Info Panel Code remains the same... */}
+      {/* ... [Keep Controls and Info Panel logic unchanged] ... */}
       {showControls && (
         <div className="absolute top-4 right-4 z-[1000] bg-white rounded-lg shadow-lg p-2">
           <div className="flex gap-2">
@@ -171,6 +176,7 @@ export default function MapComponent({
       )}
 
       {selectedLocation && (
+        // ... [Keep Popup logic unchanged] ...
         <div className="absolute bottom-4 left-4 z-[1000] w-80 bg-white rounded-lg shadow-xl p-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
           <button
             onClick={() => setSelectedLocation(null)}
@@ -193,7 +199,6 @@ export default function MapComponent({
         </div>
       )}
 
-      {/* Map Container */}
       <MapContainer
         center={center}
         zoom={zoom}
@@ -209,14 +214,22 @@ export default function MapComponent({
           onCenterChange={setCurrentCenter}
         />
 
+        {/* --- 4. Render Roads if data exists --- */}
+        {/* We use a key to force re-render when the data changes, usually React-Leaflet needs this */}
+        {roadData && (
+          <GeoJSON
+            key={JSON.stringify(roadData).length} // Simple hash to force update when data changes
+            data={roadData}
+            style={roadStyle}
+          />
+        )}
+
         {locations.map((location) => {
-          // Extra Safety Check before rendering marker
           if (!location.latitude || !location.longitude) return null;
 
           return (
             <Marker
               key={location.id}
-              // Ensure these are strictly numbers
               position={[Number(location.latitude), Number(location.longitude)]}
               icon={getMarkerIcon(
                 location.category,

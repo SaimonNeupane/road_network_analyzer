@@ -18,3 +18,8 @@ export const fetchLocations = async (dis: string, cat: string) => {
     params: params
   });
 };
+export const fetchRoads = async (district: string) => {
+
+  const data = await base_url.get(`/roads/${district} `)
+  return data
+}

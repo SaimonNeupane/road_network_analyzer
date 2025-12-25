@@ -1,6 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import osmnx as ox
+import json
+import os
 
 app = FastAPI()
 
@@ -12,47 +14,67 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Create a folder to store cached maps
+CACHE_DIR = "cache_data"
+os.makedirs(CACHE_DIR, exist_ok=True)
+
 
 @app.get("/{district_name}")
 def read_root(district_name: str):
-    clean_name = district_name.title().strip()
+    try:
+        # Added .title() here too for consistency
+        lat, lon = ox.geocode(f"{district_name.title()}, Nepal")
+        return {
+            "id": "1",
+            "name": "saimon",
+            "latitude": lat,
+            "longitude": lon,
+            "description": district_name,
+            "category": "",
+        }
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"Location not found: {str(e)}")
+
+
+@app.get("/roads/{district_name}")
+def get_roads(district_name: str):
+    clean_name = district_name.title()
+    # Define a filename for this district
+    cache_file = os.path.join(CACHE_DIR, f"{clean_name}.geojson")
 
     try:
-        # 1. Try the standard query with Title Case
-        gdf = ox.geocode_to_gdf(f"{clean_name}, Nepal")
+        # 1. CHECK CACHE: If we already have the file, return it immediately
+        if os.path.exists(cache_file):
+            print(f"Loading {clean_name} from cache...")
+            with open(cache_file, "r") as f:
+                return json.load(f)
 
-    except TypeError:
-        # 2. Fallback: If OSM returns a Point instead of Polygon, catch the error
-        # and try a more specific query to force it to find the boundary
-        try:
-            print(
-                f"Standard query failed for {clean_name}, trying specific fallback..."
-            )
-            # Adding 'Province' often forces OSM to look for administrative boundaries
-            # You might need a map of District -> Province if this generic fallback fails
-            gdf = ox.geocode_to_gdf(f"{clean_name}, Nepal")
-        except Exception as e:
-            # If it still fails, return a 404 instead of crashing the server
-            raise HTTPException(
-                status_code=404,
-                detail=f"Could not find boundary for {clean_name}. OSM Error: {str(e)}",
-            )
+        # 2. DOWNLOAD: If not in cache, download from OSM (The slow part)
+        print(f"Downloading {clean_name} from OSM (this may take time)...")
+        place_query = f"{clean_name} District, Nepal"
 
+        # simplify=True is CRITICAL for reducing file size
+        G = ox.graph_from_place(place_query, network_type="drive", simplify=True)
+
+        # Convert to GeoDataFrame
+        gdf_edges = ox.graph_to_gdfs(G, nodes=False)
+
+        # Filter columns
+        columns_to_keep = ["geometry", "name", "highway", "length"]
+        available_cols = [c for c in columns_to_keep if c in gdf_edges.columns]
+        gdf_edges = gdf_edges[available_cols]
+
+        # 3. SAVE TO CACHE: Save the result so we never download it again
+        geojson_str = gdf_edges.to_json()
+        with open(cache_file, "w") as f:
+            f.write(geojson_str)
+
+        return json.loads(geojson_str)
+
+    except ValueError:
+        raise HTTPException(
+            status_code=404,
+            detail=f"District '{district_name}' not found on OpenStreetMap.",
+        )
     except Exception as e:
-        # Catch other connection/lookup errors
         raise HTTPException(status_code=500, detail=str(e))
-
-    # Calculate centroid
-    # Note: centroid is the mathematical center.
-    # If you strictly need a point INSIDE the district (even if it's C-shaped),
-    # use gdf.geometry.iloc[0].representative_point() instead.
-    point = gdf.geometry.iloc[0].centroid
-
-    return {
-        "id": "1",  # You might want to generate this dynamically or use OSM ID
-        "name": "saimon",  # Placeholder?
-        "latitude": point.y,
-        "longitude": point.x,
-        "description": clean_name,
-        "category": "RAM",
-    }
