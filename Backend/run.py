@@ -16,6 +16,7 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
+import sys
 
 import numpy as np
 import networkx as nx
@@ -32,16 +33,18 @@ from torch_geometric.nn import SAGEConv
 
 @dataclass
 class InferConfig:
-    place_target: str = "Dhulikhel, Nepal"
-    district_name_for_csv: str = "Kavrepalanchok"
+    District, Place = sys.argv[1], sys.argv[2]
+
+    place_target: str = f"{Place}, Nepal"
+    district_name_for_csv: str = f"{District}"
 
     census_csv_path: str = "nepal_rural_data.csv"  # your file
     artifacts_dir: str = "artifacts"
     device: str = "cuda" if torch.cuda.is_available() else "cpu"
 
     # Candidate generation for new roads
-    radius_m: float = 600.0         # only connect nodes within 600m
-    max_candidates: int = 250000    # cap to stay safe
+    radius_m: float = 600.0  # only connect nodes within 600m
+    max_candidates: int = 250000  # cap to stay safe
     batch_size: int = 8192
     top_k: int = 25
 
@@ -71,7 +74,11 @@ def compute_connectivity_metrics(G: nx.MultiDiGraph) -> Dict[str, float]:
     n = Gs.number_of_nodes()
     m = Gs.number_of_edges()
     if n == 0:
-        return {"connectivity_score": 0.0, "largest_component_ratio": 0.0, "num_components": 0.0}
+        return {
+            "connectivity_score": 0.0,
+            "largest_component_ratio": 0.0,
+            "num_components": 0.0,
+        }
 
     comps = list(nx.connected_components(Gs))
     lcc = max(comps, key=len)
@@ -84,11 +91,15 @@ def compute_connectivity_metrics(G: nx.MultiDiGraph) -> Dict[str, float]:
     }
 
 
-def approximate_edge_betweenness(G: nx.MultiDiGraph, k: int = 800, weight: str = "length") -> Dict[Tuple[int, int], float]:
+def approximate_edge_betweenness(
+    G: nx.MultiDiGraph, k: int = 800, weight: str = "length"
+) -> Dict[Tuple[int, int], float]:
     Gs = nx.Graph(G)
     if Gs.number_of_edges() == 0:
         return {}
-    eb = nx.edge_betweenness_centrality(Gs, k=min(k, Gs.number_of_nodes()), weight=weight, seed=42)
+    eb = nx.edge_betweenness_centrality(
+        Gs, k=min(k, Gs.number_of_nodes()), weight=weight, seed=42
+    )
     return {(min(u, v), max(u, v)): float(val) for (u, v), val in eb.items()}
 
 
@@ -99,8 +110,12 @@ def load_pop_density(csv_path: str, district: str) -> float:
     d = df[df["District"] == district].copy()
     if d.empty:
         raise ValueError(f"District '{district}' not found in {csv_path}")
-    d["Total population"] = pd.to_numeric(d["Total population"], errors="coerce").fillna(0)
-    d["Total household number"] = pd.to_numeric(d["Total household number"], errors="coerce").fillna(0)
+    d["Total population"] = pd.to_numeric(
+        d["Total population"], errors="coerce"
+    ).fillna(0)
+    d["Total household number"] = pd.to_numeric(
+        d["Total household number"], errors="coerce"
+    ).fillna(0)
     total_pop = float(d["Total population"].sum())
     total_house = float(d["Total household number"].sum())
     return total_pop / (total_house + 1e-9)
@@ -196,7 +211,7 @@ class GraphDataset:
             cols = list(self.node_features[nodes[0]].keys())
         else:
             cols = []
-        
+
         X = torch.zeros((len(nodes), len(cols)), dtype=torch.float)
         for i, n in enumerate(nodes):
             f = self.node_features[n]
@@ -205,7 +220,11 @@ class GraphDataset:
         X = (X - X.mean(dim=0)) / (X.std(dim=0) + 1e-6)
 
         edges = [(self.node_to_idx[u], self.node_to_idx[v]) for u, v in self.G.edges()]
-        edge_index = torch.tensor(edges + [(v, u) for (u, v) in edges], dtype=torch.long).t().contiguous()
+        edge_index = (
+            torch.tensor(edges + [(v, u) for (u, v) in edges], dtype=torch.long)
+            .t()
+            .contiguous()
+        )
         data = Data(x=X, edge_index=edge_index)
         data.num_nodes = len(nodes)
         return data
@@ -219,7 +238,9 @@ class FeatureBuilder:
         self.G_drive = G_drive
         self.pop_density = float(pop_density)
 
-        self.drive_ids, self.drive_xy, self.drive_tree = build_kdtree_from_graph_nodes(G_drive)
+        self.drive_ids, self.drive_xy, self.drive_tree = build_kdtree_from_graph_nodes(
+            G_drive
+        )
         self.conn = compute_connectivity_metrics(G_drive)
         self.edge_betw = approximate_edge_betweenness(G_drive, k=betw_k)
 
@@ -246,7 +267,9 @@ class FeatureBuilder:
             }
         return feats
 
-    def edge_attr_for_drive_edges(self, G_drive: nx.MultiDiGraph, highway_vocab: Dict[str, int]) -> Tuple[List[Tuple[int, int, int]], torch.Tensor]:
+    def edge_attr_for_drive_edges(
+        self, G_drive: nx.MultiDiGraph, highway_vocab: Dict[str, int]
+    ) -> Tuple[List[Tuple[int, int, int]], torch.Tensor]:
         edges_gdf = ox.graph_to_gdfs(G_drive, nodes=False, edges=True)
         edge_keys = list(edges_gdf.index)
         E = len(edge_keys)
@@ -263,7 +286,9 @@ class FeatureBuilder:
 
             a, b = (u, v) if u < v else (v, u)
             betw = float(self.edge_betw.get((a, b), 0.0))
-            edge_attr[i] = torch.tensor([length / 1000.0, is_roundabout, hw_idx_norm, betw], dtype=torch.float)
+            edge_attr[i] = torch.tensor(
+                [length / 1000.0, is_roundabout, hw_idx_norm, betw], dtype=torch.float
+            )
 
         return edge_keys, edge_attr
 
@@ -284,7 +309,13 @@ def generate_radius_candidates(
     """
     rng = np.random.default_rng(seed)
     node_ids = list(dataset.node_to_idx.keys())
-    xy = np.array([(float(G_drive.nodes[n]["x"]), float(G_drive.nodes[n]["y"])) for n in node_ids], dtype=float)
+    xy = np.array(
+        [
+            (float(G_drive.nodes[n]["x"]), float(G_drive.nodes[n]["y"]))
+            for n in node_ids
+        ],
+        dtype=float,
+    )
     tree = cKDTree(xy)
 
     # existing edges set (undirected) in idx space
@@ -335,8 +366,12 @@ def main():
     print(f"Device: {cfg.device}")
 
     # Load metadata + models
-    meta_lp = torch.load(Path(cfg.artifacts_dir) / "drive_linkpred_meta.pt", map_location="cpu")
-    meta_cw = torch.load(Path(cfg.artifacts_dir) / "cycleway_edgeclf_meta.pt", map_location="cpu")
+    meta_lp = torch.load(
+        Path(cfg.artifacts_dir) / "drive_linkpred_meta.pt", map_location="cpu"
+    )
+    meta_cw = torch.load(
+        Path(cfg.artifacts_dir) / "cycleway_edgeclf_meta.pt", map_location="cpu"
+    )
     highway_vocab = meta_lp["highway_vocab"]
 
     in_dim_expected = len(meta_lp["node_feature_cols"])
@@ -350,14 +385,20 @@ def main():
     print(f"Downloading Place data for {cfg.place_target} ...")
     G_drive = ox.graph_from_place(cfg.place_target, network_type="drive", simplify=True)
     G_drive = ox.project_graph(G_drive)
-    print(f"✓ Place drive graph: {len(G_drive.nodes)} nodes, {len(G_drive.edges)} edges")
+    print(
+        f"✓ Place drive graph: {len(G_drive.nodes)} nodes, {len(G_drive.edges)} edges"
+    )
 
     # pop density for district
     pop_density = load_pop_density(cfg.census_csv_path, cfg.district_name_for_csv)
-    print(f"pop_density({cfg.district_name_for_csv}) = {pop_density:.4f} (population per household)")
+    print(
+        f"pop_density({cfg.district_name_for_csv}) = {pop_density:.4f} (population per household)"
+    )
 
     # Build features
-    fb = FeatureBuilder(G_drive=G_drive, pop_density=pop_density, betw_k=cfg.edge_betw_k)
+    fb = FeatureBuilder(
+        G_drive=G_drive, pop_density=pop_density, betw_k=cfg.edge_betw_k
+    )
     node_feats = fb.node_features(G_drive)
 
     # If training node features did NOT include pop_density, remove it for consistency
@@ -370,21 +411,42 @@ def main():
 
     # Load models with correct input dims
     hidden_lp = int(meta_lp["hidden_dim"])
-    lp_model = LinkPredModel(in_channels=data.num_node_features, hidden=hidden_lp).to(cfg.device)
-    lp_model.load_state_dict(torch.load(Path(cfg.artifacts_dir) / "drive_linkpred_model.pt", map_location=cfg.device))
+    lp_model = LinkPredModel(in_channels=data.num_node_features, hidden=hidden_lp).to(
+        cfg.device
+    )
+    lp_model.load_state_dict(
+        torch.load(
+            Path(cfg.artifacts_dir) / "drive_linkpred_model.pt", map_location=cfg.device
+        )
+    )
     lp_model.eval()
 
     hidden_cw = int(meta_cw["hidden_dim"])
-    cw_model = CyclewayEdgeClassifier(in_channels=data.num_node_features, edge_attr_dim=4, hidden=hidden_cw).to(cfg.device)
-    cw_model.load_state_dict(torch.load(Path(cfg.artifacts_dir) / "cycleway_edgeclf_model.pt", map_location=cfg.device))
+    cw_model = CyclewayEdgeClassifier(
+        in_channels=data.num_node_features, edge_attr_dim=4, hidden=hidden_cw
+    ).to(cfg.device)
+    cw_model.load_state_dict(
+        torch.load(
+            Path(cfg.artifacts_dir) / "cycleway_edgeclf_model.pt",
+            map_location=cfg.device,
+        )
+    )
     cw_model.eval()
 
     # -------------------- (1) Cycleway upgrades on existing edges -------
     print("\nScoring existing drive edges for cycleway upgrades...")
     edge_keys, edge_attr = fb.edge_attr_for_drive_edges(G_drive, highway_vocab)
 
-    edge_u = torch.tensor([ds.node_to_idx[u] for (u, v, k) in edge_keys], dtype=torch.long, device=cfg.device)
-    edge_v = torch.tensor([ds.node_to_idx[v] for (u, v, k) in edge_keys], dtype=torch.long, device=cfg.device)
+    edge_u = torch.tensor(
+        [ds.node_to_idx[u] for (u, v, k) in edge_keys],
+        dtype=torch.long,
+        device=cfg.device,
+    )
+    edge_v = torch.tensor(
+        [ds.node_to_idx[v] for (u, v, k) in edge_keys],
+        dtype=torch.long,
+        device=cfg.device,
+    )
     edge_attr = edge_attr.to(cfg.device)
 
     # batch score edges
@@ -392,7 +454,13 @@ def main():
     bs = cfg.batch_size
     with torch.no_grad():
         for i in range(0, len(edge_keys), bs):
-            s = cw_model(data.x, data.edge_index, edge_u[i:i+bs], edge_v[i:i+bs], edge_attr[i:i+bs])
+            s = cw_model(
+                data.x,
+                data.edge_index,
+                edge_u[i : i + bs],
+                edge_v[i : i + bs],
+                edge_attr[i : i + bs],
+            )
             scores.append(s.detach().cpu())
     scores = torch.cat(scores).numpy()
 
@@ -400,11 +468,21 @@ def main():
     top_cycle_edges = []
     for rank, i in enumerate(top_idx, start=1):
         (u, v, k) = edge_keys[i]
-        top_cycle_edges.append({"rank": rank, "u": int(u), "v": int(v), "key": int(k), "score": float(scores[i])})
+        top_cycle_edges.append(
+            {
+                "rank": rank,
+                "u": int(u),
+                "v": int(v),
+                "key": int(k),
+                "score": float(scores[i]),
+            }
+        )
 
     print("\nTop cycleway-upgrade edges (existing roads):")
     for e in top_cycle_edges:
-        print(f"  #{e['rank']}: ({e['u']}, {e['v']}, key={e['key']}) score={e['score']:.3f}")
+        print(
+            f"  #{e['rank']}: ({e['u']}, {e['v']}, key={e['key']}) score={e['score']:.3f}"
+        )
 
     # -------------------- (2) New driveway links (non-edges) ------------
     print("\nGenerating candidate new driveway links (radius-based)...")
@@ -422,7 +500,7 @@ def main():
     cand_scores = []
     with torch.no_grad():
         for i in range(0, cand_edge_index.size(1), bs):
-            batch = cand_edge_index[:, i:i+bs]
+            batch = cand_edge_index[:, i : i + bs]
             cand_scores.append(lp_model(data.x, data.edge_index, batch).detach().cpu())
     cand_scores = torch.cat(cand_scores).numpy()
 
@@ -433,7 +511,9 @@ def main():
         v_idx = int(cand_edge_index[1, j].item())
         u = int(ds.idx_to_node[u_idx])
         v = int(ds.idx_to_node[v_idx])
-        top_new_roads.append({"rank": rank, "u": u, "v": v, "score": float(cand_scores[j])})
+        top_new_roads.append(
+            {"rank": rank, "u": u, "v": v, "score": float(cand_scores[j])}
+        )
 
     print("\nTop new driveway links (build new roads):")
     for e in top_new_roads:

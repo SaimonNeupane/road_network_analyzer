@@ -1,8 +1,11 @@
 from fastapi import FastAPI, HTTPException
+import subprocess
 from fastapi.middleware.cors import CORSMiddleware
 import osmnx as ox
 import json
 import os
+import sys
+from pathlib import Path
 
 app = FastAPI()
 
@@ -72,3 +75,74 @@ def get_roads(district_name: str):
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/roads/{place_name}/{district_name}")
+def proposed_road(place_name: str, district_name: str):
+    current_api_dir = Path(__file__).resolve().parent
+
+    # Go one level up to find the project root
+    # e.g., /home/saimon/Desktop/road_network_analyzer
+    project_root = current_api_dir.parent
+
+    # Define the exact location of run.py
+    script_path = project_root / "run.py"
+
+    # Define where the output file will be (inside the root's 'outputs' folder)
+    output_file_path = project_root / "outputs" / "recommendations.json"
+
+    # ---------------------------------------------------------
+    # 2. SAFETY CHECKS
+    # ---------------------------------------------------------
+    if not script_path.exists():
+        raise HTTPException(
+            status_code=500,
+            detail=f"Server Config Error: Cannot find script at {script_path}",
+        )
+
+    # ---------------------------------------------------------
+    # 3. RUN THE SCRIPT
+    # ---------------------------------------------------------
+    try:
+        # We use cwd=project_root so the script finds 'nepal_rural_data.csv', 'artifacts', etc.
+        result = subprocess.run(
+            [sys.executable, str(script_path), district_name, place_name],
+            cwd=project_root,  # <--- CRITICAL: Runs the command from the project root
+            capture_output=True,
+            text=True,
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Subprocess failed to start: {str(e)}"
+        )
+
+    # ---------------------------------------------------------
+    # 4. HANDLE ERRORS (Script Crash)
+    # ---------------------------------------------------------
+    if result.returncode != 0:
+        # Log the full error to your console for debugging
+        print(f"SCRIPT ERROR LOG:\n{result.stderr}")
+
+        # Return the error in the API response
+        raise HTTPException(
+            status_code=500, detail=f"Inference Script Crash: {result.stderr.strip()}"
+        )
+
+    # ---------------------------------------------------------
+    # 5. READ & RETURN DATA
+    # ---------------------------------------------------------
+    if not output_file_path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="Script finished successfully, but 'outputs/recommendations.json' was not generated.",
+        )
+
+    try:
+        with open(output_file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
+
+    except json.JSONDecodeError:
+        raise HTTPException(
+            status_code=500, detail="The generated JSON file is corrupted or empty."
+        )
