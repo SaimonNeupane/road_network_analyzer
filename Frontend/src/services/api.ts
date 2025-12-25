@@ -6,7 +6,7 @@ const API_URL = "http://localhost:8000"; // Adjust if your backend port differs
 export const fetchLocations = async (district: string, place: string) => {
   // If your backend only uses district, that's fine. 
   // We keep 'place' in the signature just in case you expand the API later.
-  return axios.get(`${API_URL}/${district}`);
+  return axios.get(`${API_URL}/${place}`);
 };
 
 // 2. Fetch Existing Roads (The grey background network)

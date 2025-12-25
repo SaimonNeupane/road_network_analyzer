@@ -11,7 +11,7 @@ export default function MapPage() {
   const [locations, setLocations] = useState<LocationData[]>([]);
 
   // Input State
-  const [district, setDistrict] = useState("Kavre");
+  const [district, setDistrict] = useState("Kavrepalanchok");
   const [place, setPlace] = useState("Dhulikhel");
 
   // Map Data State
@@ -106,7 +106,7 @@ export default function MapPage() {
               className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
-              placeholder="e.g. Kavre"
+              placeholder="e.g. Kavrepalanchok"
             />
           </div>
           <div>

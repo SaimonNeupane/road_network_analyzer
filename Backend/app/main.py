@@ -22,17 +22,17 @@ CACHE_DIR = "cache_data"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 
-@app.get("/{district_name}")
-def read_root(district_name: str):
+@app.get("/{place_name}")
+def read_root(place_name: str):
     try:
         # Added .title() here too for consistency
-        lat, lon = ox.geocode(f"{district_name.title()}, Nepal")
+        lat, lon = ox.geocode(f"{place_name.title()}, Nepal")
         return {
             "id": "1",
-            "name": "saimon",
+            "name": place_name,
             "latitude": lat,
             "longitude": lon,
-            "description": district_name,
+            "description": "this is the " + place_name,
             "category": "",
         }
     except Exception as e:
